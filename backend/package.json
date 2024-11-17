@@ -1,0 +1,16 @@
+{
+  "name": "webprogpraticalwork",
+  "version": "1.0.0",
+  "description": "This repository was made for our practical work on web programming for the Information Systems course at the Federal University of Santa Catarina (UFSC)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
