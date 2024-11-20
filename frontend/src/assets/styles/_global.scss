@@ -1,10 +1,10 @@
 html, body
 {
     width: 100%;
-    height: auto;
+    height: 100vh;
     font-size: 1em;
     font-family: $font-primary;
-    background-color: $white;
+    background-color: $primary-blue-color;
     color: $black;
     scroll-behavior: smooth;
 }
@@ -16,7 +16,7 @@ img
 .container
 {
     width: 100%;
-    max-width: 1920px;
-    height: auto;
+    max-width: 1200px;
+    height: 100vh;
     margin: auto;
 }

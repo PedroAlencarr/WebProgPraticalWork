@@ -1,0 +1,39 @@
+@import "../../assets/styles/index.scss";
+
+.splash {
+    width: 100%;
+    padding: $container-padding-mobile;
+    
+    @media (min-width: $desktop-min-width) {
+        display: flex;
+        justify-content: space-between;
+        gap: 3rem;
+        padding: $container-padding-desktop;
+    }
+
+    &__imageContainer {
+        width: 100%;
+        max-width: 650px;
+        margin: auto;
+        background-color: $white;
+        padding-inline: 1.5rem;
+        margin-bottom: 3.25rem;
+    }
+
+    &__content {
+        @media (min-width: $desktop-min-width) {
+            max-width: 650px;
+        }
+    }
+
+    &__text {
+        font-size: 3.75rem;
+        line-height: 3.5rem;
+        color: $white;
+        margin-bottom: 4rem;
+
+        &--yellow {
+            color: $primary-yellow-color;
+        }
+    }
+}
