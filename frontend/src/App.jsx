@@ -1,7 +1,6 @@
-import './App.css';
 import './assets/styles/index.scss';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import Home from './pages/Home/Home';
+import Splash from './pages/Splash/Splash.jsx';
 
 function App() {
   return (
@@ -10,7 +9,7 @@ function App() {
         <BrowserRouter>
           <div className="container">
             <Routes>
-              <Route path="/" element={<Home/>}/>
+              <Route path="/" element={<Splash/>}/>
             </Routes>
           </div>
         </BrowserRouter>
