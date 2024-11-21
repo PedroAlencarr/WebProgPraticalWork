@@ -1,5 +1,4 @@
 import './Splash.scss';
-import Logo from '../../assets/images/logo.png';
 import Splash from '../../assets/images/splash.png';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
