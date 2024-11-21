@@ -23,7 +23,7 @@ const StyledMenuItemDesktop = styled(Button)(() => ({
     width: 'fit-content',
     fontSize: '1.2rem',
     color: '#fff',
-    padding: '1rem',
+    padding: '1rem 1.5rem',
     '&:hover': {
         backgroundColor: '#2b3645',
     },
@@ -32,11 +32,8 @@ const StyledMenuItemDesktop = styled(Button)(() => ({
 const StyledButton = styled(Button)(() => ({
     width: 'fit-content',
     fontSize: '1.2rem',
-    padding: '1rem 2.5rem',
-    borderRadius: '2rem',
-    '&:hover': {
-        backgroundColor: '#2b3645',
-    },
+    padding: '1rem 1.5rem',
+    borderRadius: '.5rem',
 }));
 
 export default function Header() {
@@ -53,7 +50,7 @@ export default function Header() {
 
     return (
         <AppBar ref={appBarRef} position='sticky' className='menu' sx={{backgroundColor: '#1a2028', boxShadow: 'none'}}>
-            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1400px', margin: 'auto'}}>
                 <Typography variant="h1">
                     <Link to="/">
                         <img className='menu__logo' src={Logo} alt='DayTask logo'/>
@@ -72,12 +69,12 @@ export default function Header() {
                     </StyledMenuItemDesktop>
                 </Box>
 
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-                    <StyledButton component={Link} to="/login" sx={{backgroundColor: '#FED36A', color: '#000'}}>
-                        Login
+                <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>
+                    <StyledButton component={Link} to="/login" sx={{backgroundColor: '#FED36A', color: '#000', '&:hover': {backgroundColor: '#E5BC5E'}}}>
+                        Sign In
                     </StyledButton>
-                    <StyledButton component={Link} to="/register" sx={{backgroundColor: '#FE8A6A', color: '#000'}}>
-                        Register
+                    <StyledButton component={Link} to="/register" sx={{backgroundColor: 'transparent', border:'1px solid #FED36A', color: '#FED36A', '&:hover': {backgroundColor: '#2b3645'}}}>
+                        Sign Up
                     </StyledButton>
                 </Box>
 
