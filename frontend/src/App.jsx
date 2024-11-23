@@ -3,6 +3,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Splash from './pages/Splash/Splash.jsx';
 import Login from './pages/Login/Login.jsx';
 import Header from './components/Header/Header.jsx';
+import Footer from './components/Footer/Footer.jsx';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/login" element={<Login/>}/>
           </Routes>
         </div>
+        <Footer/>
       </BrowserRouter>
     </div>
   );
