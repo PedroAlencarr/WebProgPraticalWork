@@ -1,0 +1,100 @@
+@import "../../assets/styles/index.scss";
+
+.profile__section{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.profile__pic{
+    width: 180px;
+    border-radius: 100%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border: 3px solid #FED36A;
+    transition: 0.3s;
+}
+
+.profile__pic:hover{
+    opacity: 0.9;
+    transition: 0.3s;
+}
+
+.field{
+    background-color: #455A64;
+    width: 25%;
+    height: 50px;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-weight: 300;
+    padding-left: 16px;
+    padding-right: 16px;
+    transition: 0.3s;
+}
+
+.field:hover{
+    background-color: #455a6480;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.text__div{
+    width: 75%;
+}
+
+p{
+    color: white;
+}
+
+h1{
+    color: white;
+    font-size: 40px;
+    font-weight: 900;
+}
+
+.icon{
+    border: 0;
+    text-decoration: none;
+    width: 1.2em;
+    height: 35%;
+}
+
+.logout{
+    background-color: #FED36A;
+    color: #212832;
+    width: 25%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 400;
+    margin-bottom: 20px;
+    margin-top:30px;
+    transition: 0.3s;
+}
+
+.logout img{
+    width: 5%;
+    height: 35%;
+    margin-right: 4px;
+}
+
+.logout:hover{
+    transition: 0.3s;
+    background-color: #fac746;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 912px){
+    .field{
+        width: 60%;
+    }
+
+    .logout{
+        width: 60%;
+    }
+}

@@ -5,6 +5,7 @@ import Register from './pages/Register/Register.jsx';
 import Login from './pages/Login/Login.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
+import Profile from './pages/Profile/Profile.jsx';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Splash/>}/>
             <Route path="/register" element={<Register/>}/>
+            <Route path="/profile" element={<Profile/>}/>
           </Routes>
         </div>
         <Footer/>
