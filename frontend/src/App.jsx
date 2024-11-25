@@ -1,6 +1,7 @@
 import './assets/styles/index.scss';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Splash from './pages/Splash/Splash.jsx';
+import Register from './pages/Register/Register.jsx';
 import Login from './pages/Login/Login.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
@@ -13,7 +14,7 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<Splash/>}/>
-            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
           </Routes>
         </div>
         <Footer/>

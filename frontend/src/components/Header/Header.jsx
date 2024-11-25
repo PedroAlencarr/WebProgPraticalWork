@@ -113,7 +113,7 @@ export default function Header() {
                         }
                     }}
                 >
-                    <StyledMenuItemMobile onClick={handleMobileMenuClose} component={Link} to="/home">
+                    <StyledMenuItemMobile onClick={handleMobileMenuClose} component={Link} to="/">
                     Home
                     </StyledMenuItemMobile>
                     <StyledMenuItemMobile onClick={handleMobileMenuClose} component={Link} to="/pagina2">
