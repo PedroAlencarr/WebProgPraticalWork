@@ -1,15 +1,15 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import "../Register/Register.scss";
 import Logo from '../../assets/images/logo.png';
-import React from 'react';
 import {
-  Container,
-  Box,
-  Button,
-  Typography,
-  InputAdornment,
-  IconButton,
+    Container,
+    Box,
+    Button,
+    Typography,
+    InputAdornment,
+    IconButton,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -60,8 +60,10 @@ export default function Register() {
     };
 
     const validationSchema = Yup.object({
-        fullName: Yup.string()
-        .required('Full Name is required'),
+        first_name: Yup.string()
+        .required('First Name is required'),
+        last_name: Yup.string()
+        .required('Last Name is required'),
         email: Yup.string()
         .email('Invalid email address')
         .required('Email is required'),
@@ -71,14 +73,33 @@ export default function Register() {
     });
 
     const initialValues = {
-        fullName: '',
         email: '',
+        first_name: '',
+        last_name: '',
         password: '',
     };
 
-    const handleSubmit = (values, { resetForm }) => {
-        console.log('Form data submitted:', values);
-        resetForm();
+    const handleSubmit = async (values, {resetForm}) => {
+        try {
+            const response = await fetch('http://localhost:3000/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to create user');
+            }
+    
+            const data = await response.json();
+            console.log('User created:', data);
+    
+            resetForm();
+        } catch (error) {
+            console.log('Error:', error);
+        }
     };
 
   return (
@@ -125,22 +146,6 @@ export default function Register() {
                 }}
                 >
                 <Field
-                    name="fullName"
-                    as={StyledTextField}
-                    fullWidth
-                    label="Full Name"
-                    error={touched.fullName && Boolean(errors.fullName)}
-                    helperText={<ErrorMessage name="fullName" />}
-                    InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                        <PersonOutlineOutlinedIcon sx={{ marginRight: '.5rem' }} />
-                        </InputAdornment>
-                    ),
-                    }}
-                />
-
-                <Field
                     name="email"
                     as={StyledTextField}
                     fullWidth
@@ -152,6 +157,38 @@ export default function Register() {
                     startAdornment: (
                         <InputAdornment position="start">
                         <PersonPinOutlinedIcon sx={{ marginRight: '.5rem' }} />
+                        </InputAdornment>
+                    ),
+                    }}
+                />
+
+                <Field
+                    name="first_name"
+                    as={StyledTextField}
+                    fullWidth
+                    label="First Name"
+                    error={touched.fullName && Boolean(errors.fullName)}
+                    helperText={<ErrorMessage name="first_name" />}
+                    InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                        <PersonOutlineOutlinedIcon sx={{ marginRight: '.5rem' }} />
+                        </InputAdornment>
+                    ),
+                    }}
+                />
+
+                <Field
+                    name="last_name"
+                    as={StyledTextField}
+                    fullWidth
+                    label="Last Name"
+                    error={touched.fullName && Boolean(errors.fullName)}
+                    helperText={<ErrorMessage name="last_name" />}
+                    InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                        <PersonOutlineOutlinedIcon sx={{ marginRight: '.5rem' }} />
                         </InputAdornment>
                     ),
                     }}
