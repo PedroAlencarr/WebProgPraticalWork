@@ -5,6 +5,8 @@ dotenv.config()
 const User = require('./models/user.model.js')
 const userRoute = require('./routes/user.route.js')
 const app = express()
+const passport = require('passort')
+require('./config/auth')(passport)
 
 // middlewares
 app.use(express.json())
@@ -16,7 +18,7 @@ const PORT = process.env.PORT
 const project_name = 'Node-API'
 
 //routes
-app.use('/api/users', userRoute)
+app.use('/user', userRoute)
 
 app.get('/', function (req, res) {
     res.send('Nodemon test')
