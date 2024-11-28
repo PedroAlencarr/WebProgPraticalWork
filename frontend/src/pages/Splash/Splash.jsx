@@ -1,6 +1,6 @@
 import './Splash.scss';
 import Splash from '../../assets/images/splash.png';
-import { Button } from '@mui/material';
+import CustomButton from '../../components/Button/Button';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
@@ -14,24 +14,12 @@ export default function Home() {
             <p className='splash__text'>
                 Manage your Task with <span className='splash__text splash__text--yellow'>DayTask</span>
             </p>
-            <Button 
+            <CustomButton 
                 component={Link}
                 to="/login"
-                variant="contained"
-                sx={{
-                    width: '100%',
-                    padding: '1.5rem',
-                    backgroundColor: '#FED36A',
-                    fontSize: '1.25rem',
-                    color: '#000000',
-                    textDecoration: 'none',
-                    '&:hover': {
-                    backgroundColor: '#2980b9',
-                    }
-                }}
-                >
-                Let´s Start
-            </Button>
+                fullWidth
+                text="Let's Start"
+                variantStyle="filled"/>
         </div>
     </div>
   )

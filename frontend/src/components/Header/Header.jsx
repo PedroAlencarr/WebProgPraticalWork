@@ -1,10 +1,11 @@
 import './Header.scss';
 import { useState, useRef } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Button, Box } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png'
+import CustomButton from '../Button/Button';
 
 const StyledMenuItemMobile = styled(MenuItem)(() => ({
     width: '100%',
@@ -19,7 +20,7 @@ const StyledMenuItemMobile = styled(MenuItem)(() => ({
     },
 }));
 
-const StyledMenuItemDesktop = styled(Button)(() => ({
+const StyledMenuItemDesktop = styled(MenuItem)(() => ({
     width: 'fit-content',
     fontSize: '1.2rem',
     color: '#fff',
@@ -27,13 +28,6 @@ const StyledMenuItemDesktop = styled(Button)(() => ({
     '&:hover': {
         backgroundColor: '#2b3645',
     },
-}));
-
-const StyledButton = styled(Button)(() => ({
-    width: 'fit-content',
-    fontSize: '1.2rem',
-    padding: '1rem 1.5rem',
-    borderRadius: '.5rem',
 }));
 
 export default function Header() {
@@ -70,12 +64,8 @@ export default function Header() {
                 </Box>
 
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>
-                    <StyledButton component={Link} to="/login" sx={{backgroundColor: '#FED36A', color: '#000', '&:hover': {backgroundColor: '#E5BC5E'}}}>
-                        Sign In
-                    </StyledButton>
-                    <StyledButton component={Link} to="/register" sx={{backgroundColor: 'transparent', border:'1px solid #FED36A', color: '#FED36A', '&:hover': {backgroundColor: '#2b3645'}}}>
-                        Sign Up
-                    </StyledButton>
+                    <CustomButton component={Link} to="/login" text='Sign In' variantStyle='filled'/>
+                    <CustomButton component={Link} to="/register" text='Sign Up' variantStyle='outlined'/>
                 </Box>
 
                 <IconButton

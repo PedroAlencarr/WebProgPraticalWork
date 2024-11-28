@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { 
     Container, 
     Box, 
-    Button, 
     Typography, 
     InputAdornment, 
     IconButton, 
@@ -20,6 +19,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import "../Login/Login.scss";
 import Logo from '../../assets/images/logo.png';
+import CustomButton from '../../components/Button/Button';
 
 const StyledTextField = styled(TextField)(() => ({
     '& .MuiOutlinedInput-root': {
@@ -173,28 +173,12 @@ export default function Login() {
                                 }}
                             />
 
-                            <Button
+                            <CustomButton 
                                 type="submit"
-                                variant="contained"
-                                color="primary"
-                                fullWidth
                                 disabled={!(isValid && dirty)}
-                                sx={{
-                                    width: '100%',
-                                    padding: '1rem',
-                                    marginTop: '3rem',
-                                    backgroundColor: '#FED36A',
-                                    fontSize: '1.25rem',
-                                    color: '#000000',
-                                    textDecoration: 'none',
-                                    textTransform: 'none',
-                                    '&:hover': {
-                                        backgroundColor: '#E5BC5E',
-                                    },
-                                }}
-                            >
-                                Log In
-                            </Button>
+                                fullWidth
+                                text='Log In'
+                                variantStyle='filled'/>
 
                             <Typography
                                 component="p"

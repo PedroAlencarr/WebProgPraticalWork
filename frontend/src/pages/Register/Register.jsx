@@ -5,7 +5,6 @@ import Logo from '../../assets/images/logo.png';
 import {
     Container,
     Box,
-    Button,
     Typography,
     InputAdornment,
     IconButton,
@@ -19,6 +18,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import CustomButton from '../../components/Button/Button';
 
 const StyledTextField = styled(TextField)(() => ({
     '& .MuiOutlinedInput-root': {
@@ -226,28 +226,12 @@ export default function Register() {
                     }}
                 />
 
-                <Button
+                <CustomButton 
                     type="submit"
-                    variant="contained"
-                    color="primary"
-                    fullWidth
                     disabled={!(isValid && dirty)}
-                    sx={{
-                    width: '100%',
-                    padding: '1rem',
-                    marginTop: '3rem',
-                    backgroundColor: '#FED36A',
-                    fontSize: '1.25rem',
-                    color: '#000000',
-                    textDecoration: 'none',
-                    textTransform: 'none',
-                    '&:hover': {
-                        backgroundColor: '#E5BC5E',
-                    },
-                    }}
-                >
-                    Sign Up
-                </Button>
+                    fullWidth
+                    text='Sign Up'
+                    variantStyle='filled'/>
 
                 <Typography
                     component="p"
