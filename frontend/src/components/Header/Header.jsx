@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png'
-import CustomButton from '../Button/Button';
+import CustomButton from '../CustomButton/CustomButton';
 
 const StyledMenuItemMobile = styled(MenuItem)(() => ({
     width: '100%',
