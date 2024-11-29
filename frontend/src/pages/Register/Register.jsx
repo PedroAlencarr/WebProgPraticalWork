@@ -10,37 +10,15 @@ import {
     IconButton,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import CustomButton from '../../components/Button/Button';
-
-const StyledTextField = styled(TextField)(() => ({
-    '& .MuiOutlinedInput-root': {
-        backgroundColor: '#455A64',
-        color: '#fff',
-        borderRadius: '0px',
-    },
-    '& .MuiOutlinedInput-root.Mui-focused': {
-        backgroundColor: '#455A64',
-        borderColor: '#1976d2',
-    },
-    '& .MuiInputLabel-root': {
-        color: '#8CAAB9',
-        fontSize: '1.125rem',
-        transform: 'translate(0, -.25rem)',
-        position: 'relative',
-    },
-    '& .MuiInputLabel-shrink': {
-        transform: 'translate(0, -.25rem) scale(1)',
-        fontWeight: 'bold',
-    },
-}));
+import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomField from '../../components/CustomField/CustomField';
 
 const StyledLink = styled(Link)(() => ({
     color: '#FED36A',
@@ -145,9 +123,8 @@ export default function Register() {
                     gap: 2,
                 }}
                 >
-                <Field
+                <CustomField
                     name="email"
-                    as={StyledTextField}
                     fullWidth
                     label="E-mail"
                     type="email"
@@ -156,15 +133,14 @@ export default function Register() {
                     InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                        <PersonPinOutlinedIcon sx={{ marginRight: '.5rem' }} />
+                        <PersonPinOutlinedIcon sx={{ color: '#fff', marginRight: '.5rem' }} />
                         </InputAdornment>
                     ),
                     }}
                 />
 
-                <Field
+                <CustomField
                     name="first_name"
-                    as={StyledTextField}
                     fullWidth
                     label="First Name"
                     error={touched.fullName && Boolean(errors.fullName)}
@@ -172,15 +148,14 @@ export default function Register() {
                     InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                        <PersonOutlineOutlinedIcon sx={{ marginRight: '.5rem' }} />
+                        <PersonOutlineOutlinedIcon sx={{ color: '#fff', marginRight: '.5rem' }} />
                         </InputAdornment>
                     ),
                     }}
                 />
 
-                <Field
+                <CustomField
                     name="last_name"
-                    as={StyledTextField}
                     fullWidth
                     label="Last Name"
                     error={touched.fullName && Boolean(errors.fullName)}
@@ -188,15 +163,14 @@ export default function Register() {
                     InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                        <PersonOutlineOutlinedIcon sx={{ marginRight: '.5rem' }} />
+                        <PersonOutlineOutlinedIcon sx={{ color: '#fff', marginRight: '.5rem' }} />
                         </InputAdornment>
                     ),
                     }}
                 />
 
-                <Field
+                <CustomField
                     name="password"
-                    as={StyledTextField}
                     fullWidth
                     label="Password"
                     type={showPassword ? 'text' : 'password'}
@@ -205,7 +179,7 @@ export default function Register() {
                     InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                        <LockOutlinedIcon sx={{ marginRight: '.5rem' }} />
+                        <LockOutlinedIcon sx={{ color: '#fff', marginRight: '.5rem' }} />
                         </InputAdornment>
                     ),
                     endAdornment: (

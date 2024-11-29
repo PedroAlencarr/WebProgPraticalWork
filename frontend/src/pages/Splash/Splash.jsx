@@ -1,6 +1,6 @@
 import './Splash.scss';
 import Splash from '../../assets/images/splash.png';
-import CustomButton from '../../components/Button/Button';
+import CustomButton from '../../components/CustomButton/CustomButton';
 import { Link } from 'react-router-dom';
 
 export default function Home() {

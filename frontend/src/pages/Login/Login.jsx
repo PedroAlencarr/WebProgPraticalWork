@@ -5,8 +5,7 @@ import {
     Box, 
     Typography, 
     InputAdornment, 
-    IconButton, 
-    TextField 
+    IconButton
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { 
@@ -19,29 +18,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import "../Login/Login.scss";
 import Logo from '../../assets/images/logo.png';
-import CustomButton from '../../components/Button/Button';
-
-const StyledTextField = styled(TextField)(() => ({
-    '& .MuiOutlinedInput-root': {
-        backgroundColor: '#455A64',
-        color: '#fff',
-        borderRadius: '0px',
-    },
-    '& .MuiOutlinedInput-root.Mui-focused': {
-        backgroundColor: '#455A64',
-        borderColor: '#1976d2',
-    },
-    '& .MuiInputLabel-root': {
-        color: '#8CAAB9',
-        fontSize: '1.125rem',
-        transform: 'translate(0, -.25rem)',
-        position: 'relative',
-    },
-    '& .MuiInputLabel-shrink': {
-        transform: 'translate(0, -.25rem) scale(1)',
-        fontWeight: 'bold',
-    },
-}));
+import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomField from '../../components/CustomField/CustomField';
 
 const StyledLink = styled(Link)(() => ({
     color: '#FED36A',
@@ -124,10 +102,8 @@ export default function Login() {
                                 gap: 2,
                             }}
                         >
-                            <Field
+                            <CustomField
                                 name="email"
-                                as={StyledTextField}
-                                fullWidth
                                 label="E-mail"
                                 type="email"
                                 error={touched.email && Boolean(errors.email)}
@@ -135,16 +111,15 @@ export default function Login() {
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <PersonPinOutlined sx={{ marginRight: '.5rem' }} />
+                                            <PersonPinOutlined sx={{ color: '#fff', marginRight: '.5rem' }} />
                                         </InputAdornment>
                                     ),
                                 }}
+                                fullWidth
                             />
 
-                            <Field
+                            <CustomField
                                 name="password"
-                                as={StyledTextField}
-                                fullWidth
                                 label="Password"
                                 type={showPassword ? 'text' : 'password'}
                                 error={touched.password && Boolean(errors.password)}
@@ -152,7 +127,7 @@ export default function Login() {
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <LockOutlined sx={{ marginRight: '.5rem' }} />
+                                            <LockOutlined sx={{ color: '#fff', marginRight: '.5rem' }} />
                                         </InputAdornment>
                                     ),
                                     endAdornment: (
@@ -171,6 +146,7 @@ export default function Login() {
                                         </InputAdornment>
                                     ),
                                 }}
+                                fullWidth
                             />
 
                             <CustomButton 
