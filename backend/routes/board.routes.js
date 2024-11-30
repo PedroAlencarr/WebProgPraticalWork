@@ -40,11 +40,20 @@ router.put("/:boardId", async (req, res) => {
 router.delete("/:boardId", async (req, res) => {
   try {
     const { boardId } = req.params;
-    await Board.findByIdAndDelete(boardId);
+    
+    // Tenta excluir o board
+    const board = await Board.findByIdAndDelete(boardId);
+    
+    // Se não encontrar o board, retorna um erro
+    if (!board) {
+      return res.status(404).json({ message: "Board não encontrado" });
+    }
+
     res.status(200).json({ message: "Board deletado com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 module.exports = router;

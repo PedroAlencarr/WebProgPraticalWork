@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Task = require("../models/task.model.js");
 
+// Criar nova Task
 router.post("/", async (req, res) => {
   try {
     const { title, description, type, board } = req.body;
@@ -13,6 +14,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Buscar tasks de um board específico
 router.get("/board/:boardId", async (req, res) => {
   try {
     const tasks = await Task.find({ board: req.params.boardId });
@@ -22,6 +24,7 @@ router.get("/board/:boardId", async (req, res) => {
   }
 });
 
+// Atualizar uma Task (incluindo o tipo)
 router.put("/:taskId", async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -37,6 +40,35 @@ router.put("/:taskId", async (req, res) => {
   }
 });
 
+// Atualizar apenas o tipo de uma Task (mover entre "To Do", "Doing", "Done", "Rejected")
+router.put("/:taskId/type", async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { type } = req.body;
+
+    // Verifica se o tipo é válido
+    if (!["To Do", "Doing", "Done", "Rejected"].includes(type)) {
+      return res.status(400).json({ error: "Tipo de task inválido" });
+    }
+
+    // Atualiza o tipo da task
+    const updatedTask = await Task.findByIdAndUpdate(
+      taskId,
+      { type },
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ error: "Task não encontrada" });
+    }
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Deletar uma Task
 router.delete("/:taskId", async (req, res) => {
   try {
     const { taskId } = req.params;
