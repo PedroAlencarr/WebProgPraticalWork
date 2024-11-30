@@ -25,17 +25,11 @@ const UserSchema = new Schema(
             type: String,
             required: true
         },
+    },
 
-        created_at: {
-            type: Date,
-            default: Date.now,
-            required: true
-        },
-
-        deleted_at: {
-            type: Date,
-            default: null
-        }
+    //O mongo já vai usar o timestamp para marcar a hora da criação e atualização/deleção
+    {
+        timestamps: true
     }
 )
 
