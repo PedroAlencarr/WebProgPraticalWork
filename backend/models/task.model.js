@@ -16,6 +16,7 @@ const TaskSchema = new Schema(
       type: String,
       required: true,
       enum: ["To Do", "Doing", "Done", "Rejected"],
+      default: "To Do",
     },
     board: {
       type: Schema.Types.ObjectId,
