@@ -51,4 +51,3 @@ mongoose.connect(`mongodb+srv://${USER}:${PASSWORD}@backenddb.hldza.mongodb.net/
 .catch(() => {
   console.log('connection failed')
 })
-
