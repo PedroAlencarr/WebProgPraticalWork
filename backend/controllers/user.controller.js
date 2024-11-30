@@ -61,10 +61,39 @@ const deleteUser = async (req, res) => {
     }
 }
 
+const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user || !(await user.comparePassword(password))) {
+        return res.status(401).json({ message: 'Credenciais inválidas' });
+      }
+  
+      // Salva os dados do usuário na sessão
+      req.session.userId = user._id;
+      res.status(200).json({ message: 'Login realizado com sucesso' });
+    } catch (error) {
+      res.status(500).json({ message: 'Erro no login', error });
+    }
+}
+
+const logoutUser = (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Erro ao fazer logout' });
+      }
+      res.clearCookie('connect.sid'); // Remove o cookie de sessão
+      res.status(200).json({ message: 'Logout realizado com sucesso' });
+    });
+}
+
 module.exports = {
     getUsers,
     getUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser,
+    logoutUser
 }
