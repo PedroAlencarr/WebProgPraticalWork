@@ -6,16 +6,22 @@ const CardSchema = new Schema(
     title: {
       type: String,
       required: true,
-      trim: true, // Remove espaços extras
+      trim: true, 
     },
     description: {
       type: String,
-      trim: true, // Opcional, mas limpo
+      trim: true, 
     },
-    task: {
+    status: {
+      type: String,
+      enum: ["To Do", "Doing", "Done", "Rejected"],
+      required: true,
+      default: "To Do", 
+    },
+    board: {
       type: Schema.Types.ObjectId,
-      ref: "Task", // Referência à Task
-      required: true, // Agora é obrigatório ter uma Task associada
+      ref: "Board",
+      required: true,
     },
   },
   {

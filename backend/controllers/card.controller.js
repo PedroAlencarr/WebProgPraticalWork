@@ -1,31 +1,64 @@
 const Card = require("../models/card.model.js");
-const Task = require("../models/task.model.js");
+const Board = require("../models/board.model.js");
 
-const moveCardToTask = async (req, res) => {
+const createCard = async (req, res) => {
   try {
-    const { cardId } = req.params;
-    const { taskId } = req.body; // ID da nova Task que o Card será movido
+    const { title, description, status, board } = req.body;
+    const newCard = await Card.create({
+      title,
+      description,
+      status: status || "To Do",
+      board,
+    });
+    res.status(201).json(newCard);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-    // Verificar se a nova Task existe
-    const task = await Task.findById(taskId);
-    if (!task) {
-      return res.status(404).json({ message: "Task não encontrada" });
-    }
+const getCards = async (req, res) => {
+  try {
+    const cards = await Card.find({});
+    res.status(200).json(cards);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-    // Atualizar o Card, associando-o à nova Task
-    const updatedCard = await Card.findByIdAndUpdate(
-      cardId,
-      { task: taskId }, // Atualizar a task associada ao card
-      { new: true } // Retorna o card atualizado
-    );
+const updateCard = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-    if (!updatedCard) {
+    const updated = await Card.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!updated) {
       return res.status(404).json({ message: "Card não encontrado" });
     }
 
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteCard = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cardExists = await Card.findById(id);
+    if (!cardExists) {
+      return res.status(404).json({ message: "Card não encontrado" });
+    }
+
+    const boardsUpdated = await Board.updateMany(
+      { cards: id },
+      { $pull: { cards: id } } // Remove o ID do Card do array
+    );
+
+    console.log(`Boards atualizados: ${boardsUpdated.modifiedCount}`);
+    await Card.findByIdAndDelete(id);
+
     res.status(200).json({
-      message: "Card movido para a nova Task com sucesso!",
-      card: updatedCard,
+      message: "Card deletado com sucesso!",
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -33,5 +66,8 @@ const moveCardToTask = async (req, res) => {
 };
 
 module.exports = {
-  moveCardToTask,
+  createCard,
+  getCards,
+  updateCard,
+  deleteCard,
 };
