@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import "../Register/Register.scss";
 import Logo from '../../assets/images/logo.png';
 import {
     Container,
@@ -90,7 +89,9 @@ export default function Register() {
             padding: '2rem',
         }}
     >
-        <img className='register__logo' src={Logo} alt='DayTask logo' />
+        <Box sx={{width: '8.7rem', marginBottom: '3rem'}}>
+            <img src={Logo} alt='DayTask logo' />
+        </Box>
         <Typography
             component="h2"
             gutterBottom
