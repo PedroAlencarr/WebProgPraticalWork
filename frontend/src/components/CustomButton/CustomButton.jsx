@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const StyledButton = styled(Button)(({ variantStyle, }) => ({
+const StyledButton = styled(Button)(({ ownerState: { variantStyle } }) => ({
     padding: '1.5rem',
     backgroundColor: variantStyle == 'filled' ? '#FED36A' : 'transparent',
     border: variantStyle == 'filled' ? 'none' : '1px solid #FED36A',
@@ -18,7 +18,7 @@ const StyledButton = styled(Button)(({ variantStyle, }) => ({
 export default function CustomButton({ text, variantStyle, ...props }) {
     return (
         <StyledButton
-            variantStyle={variantStyle}
+            ownerState={{ variantStyle }}
             {...props}
         >
             {text}
