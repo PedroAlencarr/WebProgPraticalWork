@@ -17,6 +17,13 @@ const BoardSchema = new Schema(
       ref: "User",
       required: true,
     },
+    card: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Card",
+        required: false,
+      },
+    ],
     sharedWith: [
       {
         type: Schema.Types.ObjectId,
@@ -29,4 +36,6 @@ const BoardSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Board", BoardSchema);
+const Board = mongoose.model("Board", BoardSchema);
+
+module.exports = Board;

@@ -8,6 +8,9 @@ const cors = require('cors');
 dotenv.config()
 const User = require('./models/user.model.js')
 const userRoute = require('./routes/user.route.js')
+const boardRoute = require('./routes/board.routes.js')
+const cardRoute = require('./routes/card.routes.js')
+
 const app = express()
 
 // environment variables
@@ -37,6 +40,10 @@ app.use(
 
 //routes
 app.use('/api/users', userRoute)
+app.use('/api/boards', boardRoute)
+app.use('/api/cards', cardRoute)
+
+
 app.get('/', function (req, res) {
     res.send('Nodemon test')
 })
