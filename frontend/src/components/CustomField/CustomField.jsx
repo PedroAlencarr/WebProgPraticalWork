@@ -8,12 +8,6 @@ const StyledField = styled(TextField)(() => ({
         backgroundColor: '#455A64',
         color: '#fff',
         borderRadius: '0px',
-        '& input:-webkit-autofill': {
-            WebkitBoxShadow: '0 0 0 100px #455A64 inset !important',
-            boxShadow: '0 0 0 100px #455A64 inset !important',
-            backgroundColor: '#455A64 !important',
-            color: '#fff !important',
-        },
     },
     '& .MuiOutlinedInput-root.Mui-focused': {
         backgroundColor: '#455A64',
