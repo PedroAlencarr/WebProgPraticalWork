@@ -21,7 +21,10 @@ const project_name = 'Node-API'
 
 // middlewares
 app.use(express.json())
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 app.use(
   session({
     secret: process.env.SESSION_SECRET, // Coloque uma string secreta em .env
