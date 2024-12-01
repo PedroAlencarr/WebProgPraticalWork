@@ -2,7 +2,7 @@ import './Header.scss';
 import { useState, useRef } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png'
 import CustomButton from '../CustomButton/CustomButton';
@@ -75,7 +75,7 @@ export default function Header() {
                     onClick={handleMobileMenuOpen}
                     sx={{ display: { xs: 'block', md: 'none' } }}
                 >
-                    <MenuIcon sx={{fontSize: '3rem'}}/>
+                    {isMobileMenuOpen ? <CloseIcon sx={{fontSize: '3rem'}}/> : <MenuIcon sx={{fontSize: '3rem'}}/>}
                 </IconButton>
 
                 <Menu
