@@ -16,8 +16,8 @@ import {
 } from '@mui/icons-material';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import "../Login/Login.scss";
 import Logo from '../../assets/images/logo.png';
+import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import CustomField from '../../components/CustomField/CustomField';
 
@@ -30,6 +30,8 @@ const StyledLink = styled(Link)(() => ({
 }));
 
 export default function Login() {
+    const navigate = useNavigate();
+
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -53,8 +55,30 @@ export default function Login() {
     };
 
     const handleSubmit = async (values, { resetForm }) => {
-        console.log(values)
-        resetForm()
+        try {
+            const response = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values),
+                credentials: 'include',
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Login realizado com sucesso', data);
+
+                navigate('/profile');
+            } else {
+                const errorData = await response.json();
+                console.log('Erro no login:', errorData.message);
+            }
+
+            resetForm();
+        } catch (error) {
+            console.error('Erro ao fazer login:', error);
+        }
     };
 
     return (
@@ -68,7 +92,9 @@ export default function Login() {
                 padding: '2rem',
             }}
         >
-            <img className='login__logo' src={Logo} alt='DayTask logo' />
+            <Box sx={{width: '8.7rem', marginBottom: '3rem'}}>
+                <img src={Logo} alt='DayTask logo' />
+            </Box>
             <Typography
                 component="h2"
                 gutterBottom
