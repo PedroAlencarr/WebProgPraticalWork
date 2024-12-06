@@ -7,6 +7,7 @@ import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
 import Profile from './pages/Profile/Profile.jsx';
 import TaskCreation from './pages/TaskCreation/TaskCreation.jsx'
+import ProjectDetails from './pages/ProjectDetails/ProjectDetails.jsx';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/register" element={<Register/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/taskcreation" element={<TaskCreation/>}/>
+            <Route path="/projectdetails" element={<ProjectDetails/>}/>
           </Routes>
         </div>
         <Footer/>
