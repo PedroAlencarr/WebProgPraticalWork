@@ -16,8 +16,8 @@ function App() {
         <Header/>
         <div className="container">
           <Routes>
-            <Route path="/" element={<Splash/>}/>
-            <Route path="/login" element={<Login/>}/>
+            <Route path="/https://webprogpraticalwork-backend.onrender.com/" element={<Splash/>}/>
+            <Route path="/https://webprogpraticalwork-backend.onrender.com/api/users/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/taskcreation" element={<TaskCreation/>}/>
