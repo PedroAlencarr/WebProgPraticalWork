@@ -60,7 +60,7 @@ export default function Register() {
 
     const handleSubmit = async (values, {resetForm}) => {
         try {
-            const response = await fetch(`${VITE_BACK_URL}api/users`, {
+            const response = await fetch(`${VITE_BACK_URL}/api/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
