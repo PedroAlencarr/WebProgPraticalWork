@@ -17,12 +17,13 @@ const app = express()
 const USER = process.env.USER
 const PASSWORD = process.env.PASSWORD
 const PORT = process.env.PORT
+const FRONT_URL = process.env.FRONT_URL
 const project_name = 'Node-API'
 
 // middlewares
 app.use(express.json())
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: FRONT_URL,
   credentials: true
 }));
 app.use(
@@ -48,7 +49,7 @@ app.use('/api/cards', cardRoute)
 
 
 app.get('/', function (req, res) {
-    res.send('Nodemon test')
+    res.send('Home')
 })
 
 mongoose.connect(`mongodb+srv://${USER}:${PASSWORD}@backenddb.hldza.mongodb.net/${project_name}?retryWrites=true&w=majority&appName=BackendDB`)
