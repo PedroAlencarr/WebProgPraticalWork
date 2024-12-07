@@ -4,6 +4,7 @@
   "description": "This repository was made for our practical work on web programming for the Information Systems course at the Federal University of Santa Catarina (UFSC)",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "node index.js",
     "dev": "nodemon index.js"
