@@ -18,6 +18,7 @@ import PrivacyIcon from '../../assets/images/security-icon.png';
 import SettingsIcon from '../../assets/images/settings-icon.png';
 import LogoutIcon from '../../assets/images/logout-icon.png';
 
+const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
 
 const Section = styled(Box)({
   display: 'flex',
@@ -70,6 +71,46 @@ const LogoutButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function Profile() {
+
+
+
+
+
+
+
+
+
+
+
+
+  const handleSubmit = async (email) => {
+
+    const sent_body = {
+      "email": "rafael_lima@mail.com"
+    }
+
+    try {
+        const response = await fetch(`${VITE_BACK_URL}/api/users/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(sent_body),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to create user');
+        }
+
+        const data = await response.json();
+        console.log('User created:', data);
+
+        resetForm();
+    } catch (error) {
+        console.log('Error:', error);
+    }
+};
+
     return (
         <Section sx={{marginTop: '50px', marginBottom: '50px'}}>
           <Typography
@@ -132,7 +173,9 @@ export default function Profile() {
             </IconButton>
           </FieldButton>
     
-          <LogoutButton sx={{width: {xs: '15rem', sm: '17rem', md: '20rem' }}} startIcon={<img src={LogoutIcon} alt="Logout" style={{ width: '22px', height: '22px' }} />}>
+          <LogoutButton 
+          onClick={handleSubmit}
+          sx={{width: {xs: '15rem', sm: '17rem', md: '20rem' }}} startIcon={<img src={LogoutIcon} alt="Logout" style={{ width: '22px', height: '22px' }} />}>
             Logout
           </LogoutButton>
         </Section>
