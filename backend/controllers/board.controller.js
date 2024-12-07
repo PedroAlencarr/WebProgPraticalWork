@@ -75,10 +75,29 @@ const deleteBoard = async (req, res) => {
   }
 };
 
+const getBoardsByUserId = async (req, res) => {
+  try {
+    const userId = req.userId
+    
+    const boards = await Board.find({
+      $or: [
+        { createdBy: userId }, 
+        { sharedWith: userId }
+      ]
+    })
+
+    res.status(200).json(boards)
+  } catch (err) {
+    res.status(500).json({ message: "Erro ao buscar boards", error: err });
+  }
+}
+
+
 module.exports = {
   getBoards,
   getBoardById,
   createBoard,
   updateBoard,
   deleteBoard,
+  getBoardsByUserId,
 };

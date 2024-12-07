@@ -88,6 +88,23 @@ const logoutUser = (req, res) => {
     });
 }
 
+const getCurrentUser = async (req, res) => {
+    try {
+        console.log('aqui foi')
+      const userId = req.userId; // Obtém o ID do usuário da sessão
+      console.log('aqui foi 2')
+      const user = await User.findById(userId).select("-password"); // Busca o usuário pelo ID
+      if (!user) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+  
+      res.status(200).json(user); // Retorna os dados do usuário
+    } catch (error) {
+      console.error("Erro ao buscar usuário autenticado:", error);
+      res.status(500).json({ message: "Erro ao buscar usuário autenticado", error: error.message });
+    }
+};
+
 module.exports = {
     getUsers,
     getUser,
@@ -95,5 +112,6 @@ module.exports = {
     updateUser,
     deleteUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    getCurrentUser
 }
