@@ -19,7 +19,7 @@ import * as Yup from 'yup';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import CustomField from '../../components/CustomField/CustomField';
 
-const BACK_URL = process.env.BACK_URL
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 const StyledLink = styled(Link)(() => ({
     color: '#FED36A',
