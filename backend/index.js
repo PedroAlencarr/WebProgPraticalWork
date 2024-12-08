@@ -21,8 +21,6 @@ const PORT = process.env.PORT
 const FRONT_URL = process.env.FRONT_URL
 const project_name = 'Node-API'
 
-console.log(FRONT_URL)
-
 // middlewares
 app.use(express.json())
 app.use(cors({
@@ -40,7 +38,7 @@ app.use(
     cookie: {
       httpOnly: true, // Protege contra XSS
       maxAge: 1000 * 60 * 60 * 24, // 1 dia
-      sameSite: 'None',
+      secure: false,
     },
   })
 );
