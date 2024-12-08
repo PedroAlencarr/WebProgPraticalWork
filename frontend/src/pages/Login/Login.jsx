@@ -35,7 +35,7 @@ const StyledLink = styled(Link)(() => ({
 
 export default function Login() {
     const navigate = useNavigate();
-    const { fetchUser } = useContext(AuthContext);
+    const { fetchUserCurrent } = useContext(AuthContext);
 
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -80,7 +80,7 @@ export default function Login() {
                 const data = await response.json();
                 console.log('Login realizado com sucesso', data);
 
-                fetchUser()
+                fetchUserCurrent()
                 navigate('/boards');
             } else {
                 const errorData = await response.json();
