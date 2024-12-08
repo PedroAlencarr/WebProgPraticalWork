@@ -38,8 +38,8 @@ app.use(
     cookie: {
       httpOnly: true, // Protege contra XSS
       maxAge: 1000 * 60 * 60 * 24, // 1 dia
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
     },
   })
 );
@@ -68,3 +68,12 @@ mongoose.connect(`mongodb+srv://${USER}:${PASSWORD}@backenddb.hldza.mongodb.net/
 .catch(() => {
   console.log('connection failed')
 })
+
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.protocol === 'http') {
+      return res.redirect(301, `https://${req.headers.host}${req.url}`);
+    }
+    next();
+  });
+}
