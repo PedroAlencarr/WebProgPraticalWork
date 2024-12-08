@@ -1,8 +1,9 @@
 import './assets/styles/index.scss';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
-import Splash from './pages/Splash/Splash.jsx';
+import Home from './pages/Home/Home.jsx';
 import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
 import Profile from './pages/Profile/Profile.jsx';
@@ -16,12 +17,33 @@ function App() {
         <Header/>
         <div className="container">
           <Routes>
-            <Route path="/" element={<Splash/>}/>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/register" element={<Register/>}/>
-            <Route path="/profile" element={<Profile/>}/>
-            <Route path="/taskcreation" element={<TaskCreation/>}/>
-            <Route path="/projectdetails" element={<ProjectDetails/>}/>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/taskcreation"
+              element={
+                <ProtectedRoute>
+                  <TaskCreation />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/projectdetails"
+              element={
+                <ProtectedRoute>
+                  <ProjectDetails />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
         <Footer/>
