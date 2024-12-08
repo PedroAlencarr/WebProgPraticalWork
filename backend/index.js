@@ -22,7 +22,6 @@ const FRONT_URL = process.env.FRONT_URL
 const project_name = 'Node-API'
 
 // middlewares
-app.set("trust proxy",1);
 app.use(express.json())
 app.use(cors({
   origin: FRONT_URL,
