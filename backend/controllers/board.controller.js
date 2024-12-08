@@ -11,14 +11,13 @@ const getBoards = async (req, res) => {
   }
 };
 
-//TO DO REGEX
 const getBoardById = async (req, res) => {
   try {
     const board = await Board.findById(req.params.id);
     if (!board) {
       return res.status(404).json({ message: "Board não encontrado" });
     }
-    res.status(200).res.send(board);
+    res.status(200).json(board);
   } catch (err) {
     res.status(500).json({ message: "Erro ao buscar board", error: err });
   }
