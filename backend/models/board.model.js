@@ -8,21 +8,25 @@ const BoardSchema = new Schema(
       required: true,
       trim: true,
     },
+
     description: {
       type: String,
       trim: true,
     },
+
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+
     card: [
       {
         type: Schema.Types.ObjectId,
         ref: "Card",
         required: false,
       },
+
     ],
     sharedWith: [
       {
@@ -31,6 +35,7 @@ const BoardSchema = new Schema(
       },
     ],
   },
+  
   {
     timestamps: true,
   }

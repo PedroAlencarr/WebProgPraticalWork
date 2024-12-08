@@ -8,22 +8,27 @@ const CardSchema = new Schema(
       required: true,
       trim: true, 
     },
+
     description: {
       type: String,
       trim: true, 
     },
+
     status: {
       type: String,
       enum: ["To Do", "Doing", "Done", "Rejected"],
       required: true,
       default: "To Do", 
     },
+
     board: {
       type: Schema.Types.ObjectId,
       ref: "Board",
       required: true,
     },
+
   },
+  
   {
     timestamps: true,
   }
