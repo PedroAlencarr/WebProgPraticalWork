@@ -40,7 +40,7 @@ app.use(
       httpOnly: true, // Protege contra XSS
       maxAge: 1000 * 60 * 60 * 24, // 1 dia
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
     },
   })
 );
