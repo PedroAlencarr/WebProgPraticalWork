@@ -62,7 +62,7 @@ mongoose.connect(`mongodb+srv://${USER}:${PASSWORD}@backenddb.hldza.mongodb.net/
 .then(() => {
   console.log('connected to the database')
   app.listen(PORT, () => {
-    console.log(`Server is running on port https://localhost:${PORT}`)
+    console.log(`Server is running on port http://localhost:${PORT}`)
   })
 })
 .catch(() => {
