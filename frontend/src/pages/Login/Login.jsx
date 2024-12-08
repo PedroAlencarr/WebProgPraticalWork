@@ -21,6 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import CustomField from '../../components/CustomField/CustomField';
 
+const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
+
 const StyledLink = styled(Link)(() => ({
     color: '#FED36A',
     textDecoration: 'none',
@@ -56,7 +58,7 @@ export default function Login() {
 
     const handleSubmit = async (values, { resetForm }) => {
         try {
-            const response = await fetch('http://localhost:3000/api/login', {
+            const response = await fetch(`${VITE_BACK_URL}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
