@@ -3,10 +3,11 @@ import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [userId, setUserId] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUser = async () => {
+  const fetchUserCurrent = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/users/current`, {
         credentials: 'include',
@@ -14,24 +15,42 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const userData = await response.json();
-        setUser(userData);
+        setUserId(userData);
+        fetchUser(userData._id)
       } else {
-        setUser(null);
+        setUserId(null);
       }
     } catch (error) {
         console.error('Erro ao buscar usuário:', error);
-        setUser(null);
+        setUserId(null);
     } finally {
         setLoading(false);
     }
   };
 
+  const fetchUser = async (userId) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/users/${userId}`, {
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+      } else {
+        console.error('Erro ao buscar o nome do usuário');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar o nome do usuário:', error);
+    }
+  };
+
   useEffect(() => {
-    fetchUser();
+    fetchUserCurrent();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, fetchUser }}>
+    <AuthContext.Provider value={{ user, setUser, loading, fetchUserCurrent }}>
       {children}
     </AuthContext.Provider>
   );
