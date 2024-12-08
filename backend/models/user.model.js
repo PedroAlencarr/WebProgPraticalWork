@@ -25,6 +25,7 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    
     board: [
       {
         type: Schema.Types.ObjectId,
@@ -39,13 +40,6 @@ const UserSchema = new Schema(
     timestamps: true,
   }
 );
-
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next(); // Evita rehash em atualizações
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
 
 UserSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);

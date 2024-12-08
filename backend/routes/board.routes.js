@@ -7,12 +7,17 @@ const {
   createBoard,
   deleteBoard,
   updateBoard,
+  getBoardsByUserId
 } = require("../controllers/board.controller.js");
+const isAuthenticated = require("../middlewares/auth");
 
+router.get('/teste', isAuthenticated, getBoardsByUserId);
 router.get("/", getBoards);
 router.get("/:id", getBoardById);
 router.post("/", createBoard);
 router.patch("/:id", updateBoard);
 router.delete("/:id", deleteBoard);
+
+
 
 module.exports = router;
