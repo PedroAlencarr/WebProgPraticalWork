@@ -62,9 +62,18 @@ mongoose.connect(`mongodb+srv://${USER}:${PASSWORD}@backenddb.hldza.mongodb.net/
 .then(() => {
   console.log('connected to the database')
   app.listen(PORT, () => {
-    console.log(`Server is running on port http://localhost:${PORT}`)
+    console.log(`Server is running on port https://localhost:${PORT}`)
   })
 })
 .catch(() => {
   console.log('connection failed')
 })
+
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.protocol === 'http') {
+      return res.redirect(301, `https://${req.headers.host}${req.url}`);
+    }
+    next();
+  });
+}
