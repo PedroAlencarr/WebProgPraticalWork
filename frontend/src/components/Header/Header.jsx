@@ -1,11 +1,13 @@
 import './Header.scss';
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png'
 import CustomButton from '../CustomButton/CustomButton';
+import { AuthContext } from '../../context/AuthContext.jsx'
+import { useNavigate } from 'react-router-dom';
 
 const StyledMenuItemMobile = styled(MenuItem)(() => ({
     width: '100%',
@@ -31,8 +33,22 @@ const StyledMenuItemDesktop = styled(MenuItem)(() => ({
 }));
 
 export default function Header() {
+
     const appBarRef = useRef(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const menuItems = user
+    ? [
+        { text: 'Profile', to: '/profile' },
+        { text: 'Logout', action: handleLogout },
+        ]
+    : [
+        { text: 'Login', to: '/login' },
+        { text: 'Register', to: '/register' },
+        ];
+  
 
     const handleMobileMenuOpen = () => {
         setIsMobileMenuOpen(true);
@@ -41,6 +57,11 @@ export default function Header() {
     const handleMobileMenuClose = () => {
         setIsMobileMenuOpen(false);
     };
+
+    const handleLogout = () => {
+        //logout();
+        navigate('/login');
+      };
 
     return (
         <AppBar ref={appBarRef} position='sticky' className='menu' sx={{backgroundColor: '#1a2028', boxShadow: 'none'}}>
@@ -51,21 +72,18 @@ export default function Header() {
                     </Link>
                 </Typography>
 
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-                    <StyledMenuItemDesktop component={Link} to="/home">
-                        Home
-                    </StyledMenuItemDesktop>
-                    <StyledMenuItemDesktop component={Link} to="/pagina2">
-                        Página 2
-                    </StyledMenuItemDesktop>
-                    <StyledMenuItemDesktop component={Link} to="/pagina3">
-                        Página 3
-                    </StyledMenuItemDesktop>
-                </Box>
-
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '1rem' }}>
-                    <CustomButton component={Link} to="/login" text='Sign In' variantStyle='filled'/>
-                    <CustomButton component={Link} to="/register" text='Sign Up' variantStyle='outlined'/>
+                {user ? (
+                    <> 
+                        <CustomButton component={Link} to="/profile" text="Profile" variantStyle="filled" />
+                        <CustomButton onClick={handleLogout} text="Logout" variantStyle="outlined" />
+                    </>
+                ) : (
+                    <>
+                        <CustomButton component={Link} to="/login" text="Sign In" variantStyle="filled" />
+                        <CustomButton component={Link} to="/register" text="Sign Up" variantStyle="outlined" />
+                    </>
+                )}
                 </Box>
 
                 <IconButton
@@ -103,21 +121,17 @@ export default function Header() {
                         }
                     }}
                 >
-                    <StyledMenuItemMobile onClick={handleMobileMenuClose} component={Link} to="/">
-                    Home
-                    </StyledMenuItemMobile>
-                    <StyledMenuItemMobile onClick={handleMobileMenuClose} component={Link} to="/pagina2">
-                    Página 2
-                    </StyledMenuItemMobile>
-                    <StyledMenuItemMobile onClick={handleMobileMenuClose} component={Link} to="/services">
-                    Página 3
-                    </StyledMenuItemMobile>
-                    <StyledMenuItemMobile onClick={handleMobileMenuClose} component={Link} to="/login">
-                    Login
-                    </StyledMenuItemMobile>
-                    <StyledMenuItemMobile onClick={handleMobileMenuClose} component={Link} to="/register">
-                    Register
-                    </StyledMenuItemMobile>
+                   {menuItems.map((item, index) => (
+                        item.action ? (
+                        <StyledMenuItemMobile key={index} onClick={item.action}>
+                            {item.text}
+                        </StyledMenuItemMobile>
+                        ) : (
+                        <StyledMenuItemMobile key={index} component={Link} to={item.to} onClick={handleMobileMenuClose}>
+                            {item.text}
+                        </StyledMenuItemMobile>
+                        )
+                    ))}
                 </Menu>
             </Toolbar>
         </AppBar>
