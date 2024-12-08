@@ -38,6 +38,7 @@ app.use(
     cookie: {
       httpOnly: true, // Protege contra XSS
       maxAge: 1000 * 60 * 60 * 24, // 1 dia
+      sameSite: 'None',
     },
   })
 );
