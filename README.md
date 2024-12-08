@@ -1,5 +1,7 @@
 # **Day Task**  
 
+ Link do site: https://web-prog-pratical-work-taupe.vercel.app/
+
 Uma aplicação de Kanban colaborativa, simples e eficiente para gerenciamento de tarefas.  
 
 ---
