@@ -9,15 +9,17 @@ const {
   deleteUser,
   loginUser,
   logoutUser,
+  getCurrentUser
 } = require("../controllers/user.controller.js");
-const { protect } = require("../middlewares/auth");
+const isAuthenticated = require("../middlewares/auth");
 
-router.get("/", getUsers);
-router.get("/:id", protect, getUser);
+router.get("/current", isAuthenticated, getCurrentUser);
+router.get("/:id", isAuthenticated, getUser);
 router.post("/", createUser);
 router.patch("/:id", updateUser);
 router.delete("/:id", deleteUser);
 router.post("/login", loginUser);
-router.post("/logout", protect, logoutUser);
+router.post("/logout", isAuthenticated, logoutUser);
+
 
 module.exports = router;

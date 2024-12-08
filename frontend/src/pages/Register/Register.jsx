@@ -19,6 +19,8 @@ import * as Yup from 'yup';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import CustomField from '../../components/CustomField/CustomField';
 
+const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
+
 const StyledLink = styled(Link)(() => ({
     color: '#FED36A',
     textDecoration: 'none',
@@ -58,7 +60,7 @@ export default function Register() {
 
     const handleSubmit = async (values, {resetForm}) => {
         try {
-            const response = await fetch('http://localhost:3000/api/users', {
+            const response = await fetch(`${VITE_BACK_URL}/api/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

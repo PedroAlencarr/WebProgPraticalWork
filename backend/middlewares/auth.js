@@ -1,8 +1,20 @@
-const protect = (req, res, next) => {
-    if (!req.session.userId) {
-      return res.status(401).json({ message: 'Não autorizado' });
+const isAuthenticated = (req, res, next) => {
+  try {
+    const userId = req.session.userId; // Obtém o ID do usuário da sessão
+
+    if (!userId) {
+      console.log('usuário não autenticado')
+      return res.status(401).json({ message: "Usuário não autenticado" });
     }
-    next();
-  };
-  
-module.exports = { protect };
+
+    req.userId = userId; // Armazena o ID do usuário no objeto `req` para uso nas rotas
+    console.log(req.userId)
+    next(); // Continua para o próximo middleware ou controlador
+  } catch (err) {
+    console.error("Erro na verificação de autenticação:", err);
+    res.status(500).json({ message: "Erro interno na autenticação" });
+  }
+};
+
+
+module.exports = isAuthenticated
