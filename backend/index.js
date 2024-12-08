@@ -68,12 +68,3 @@ mongoose.connect(`mongodb+srv://${USER}:${PASSWORD}@backenddb.hldza.mongodb.net/
 .catch(() => {
   console.log('connection failed')
 })
-
-if (process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    if (req.protocol === 'http') {
-      return res.redirect(301, `https://${req.headers.host}${req.url}`);
-    }
-    next();
-  });
-}
