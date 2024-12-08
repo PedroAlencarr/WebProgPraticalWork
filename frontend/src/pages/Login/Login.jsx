@@ -58,7 +58,7 @@ export default function Login() {
 
     const handleSubmit = async (values, { resetForm }) => {
         try {
-            const response = await fetch(`${VITE_BACK_URL}/api/login`, {
+            const response = await fetch(`${VITE_BACK_URL}/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
