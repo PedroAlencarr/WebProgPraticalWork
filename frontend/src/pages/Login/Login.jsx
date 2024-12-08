@@ -14,12 +14,14 @@ import {
     VisibilityOutlined, 
     VisibilityOffOutlined 
 } from '@mui/icons-material';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Logo from '../../assets/images/logo.png';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import CustomField from '../../components/CustomField/CustomField';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext.jsx';
 
 const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
 
@@ -33,6 +35,7 @@ const StyledLink = styled(Link)(() => ({
 
 export default function Login() {
     const navigate = useNavigate();
+    const { fetchUser } = useContext(AuthContext);
 
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -66,10 +69,10 @@ export default function Login() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(
+                body: JSON.stringify({
                     email,
                     password
-                ),
+                }),
                 credentials: 'include',
             });
     
@@ -77,7 +80,8 @@ export default function Login() {
                 const data = await response.json();
                 console.log('Login realizado com sucesso', data);
 
-                navigate('/profile');
+                fetchUser()
+                navigate('/boards');
             } else {
                 const errorData = await response.json();
                 console.log('Erro no login:', errorData.message);
