@@ -21,6 +21,8 @@ const PORT = process.env.PORT
 const FRONT_URL = process.env.FRONT_URL
 const project_name = 'Node-API'
 
+console.log(FRONT_URL)
+
 // middlewares
 app.use(express.json())
 app.use(cors({
