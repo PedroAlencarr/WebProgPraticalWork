@@ -11,10 +11,10 @@ const {
 } = require("../controllers/board.controller.js");
 const isAuthenticated = require("../middlewares/auth");
 
-router.get('/teste', isAuthenticated, getBoardsByUserId);
+router.get('/current', isAuthenticated, getBoardsByUserId);
 router.get("/", getBoards);
 router.get("/:id", getBoardById);
-router.post("/", createBoard);
+router.post("/", isAuthenticated, createBoard);
 router.patch("/:id", updateBoard);
 router.delete("/:id", deleteBoard);
 

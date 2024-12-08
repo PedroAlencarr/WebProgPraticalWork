@@ -35,7 +35,6 @@ const UserSchema = new Schema(
     ],
   },
 
-  //O mongo já vai usar o timestamp para marcar a hora da criação e atualização/deleção
   {
     timestamps: true,
   }
