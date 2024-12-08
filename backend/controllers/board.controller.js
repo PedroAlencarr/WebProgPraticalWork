@@ -26,17 +26,22 @@ const getBoardById = async (req, res) => {
 
 const createBoard = async (req, res) => {
   try {
-    const newBoard = new Board(req.body);
-    await newBoard.save();
-    const populatedBoard = await Board.findById(newBoard._id).populate({
-      path: "createdBy",
-      select: "first_name last_name email",
-    });
 
-    res.status(201).json({
-      message: "Board criado com sucesso!",
-      board: populatedBoard,
+    const { title, description } = req.body;
+    const userId = req.userId;
+
+    if (title.length == 0) {
+      return res.status(400).json({ message: 'O Board precisa ter um título!' })
+    }
+
+    const board = await Board.create({
+      title,
+      description,
+      createdBy: userId,
     });
+    
+
+    res.status(201).json({ message: "Board criado com sucesso!" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Erro ao criar board", error: err });
