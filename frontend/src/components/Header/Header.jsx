@@ -2,7 +2,7 @@ import './Header.scss';
 import { useState, useRef, useContext } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Close as CloseIcon, LogoutOutlined } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png'
 import CustomButton from '../CustomButton/CustomButton';
@@ -33,11 +33,35 @@ const StyledMenuItemDesktop = styled(MenuItem)(() => ({
 }));
 
 export default function Header() {
-
     const appBarRef = useRef(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
     const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/users/logout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Logout realizado com sucesso', data);
+                setUser(null)
+
+                navigate('/login');
+            } else {
+                const errorData = await response.json();
+                console.log('Erro no logout:', errorData.message);
+            }
+        } catch (error) {
+            console.error('Erro ao fazer logout:', error);
+        }
+    };
 
     const menuItems = user
     ? [
@@ -57,11 +81,6 @@ export default function Header() {
     const handleMobileMenuClose = () => {
         setIsMobileMenuOpen(false);
     };
-
-    const handleLogout = () => {
-        //logout();
-        navigate('/login');
-      };
 
     return (
         <AppBar ref={appBarRef} position='sticky' className='menu' sx={{backgroundColor: '#1a2028', boxShadow: 'none'}}>

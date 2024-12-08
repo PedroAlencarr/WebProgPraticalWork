@@ -9,6 +9,7 @@ import Register from './pages/Register/Register.jsx';
 import Profile from './pages/Profile/Profile.jsx';
 import TaskCreation from './pages/TaskCreation/TaskCreation.jsx'
 import ProjectDetails from './pages/ProjectDetails/ProjectDetails.jsx';
+import PublicRoute from './components/PublicRoute/PublicRoute.jsx';
 
 function App() {
   return (
@@ -17,9 +18,30 @@ function App() {
         <Header/>
         <div className="container">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route 
+                path="/"
+                element={
+                  <PublicRoute>
+                    <Home />
+                  </PublicRoute>
+                }
+            />
+            <Route 
+              path="/login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+            />
+             <Route 
+              path="/register"
+              element={
+                <PublicRoute>
+                  <Register />
+                </PublicRoute>
+              }
+            />
             <Route
               path="/profile"
               element={
