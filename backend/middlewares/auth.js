@@ -8,7 +8,6 @@ const isAuthenticated = (req, res, next) => {
     }
 
     req.userId = userId; // Armazena o ID do usuário no objeto `req` para uso nas rotas
-    console.log(req.userId)
     next(); // Continua para o próximo middleware ou controlador
   } catch (err) {
     console.error("Erro na verificação de autenticação:", err);

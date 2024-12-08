@@ -1,5 +1,6 @@
 const express = require('express')
 const session = require('express-session')
+const listEndpoints = require('express-list-endpoints');
 const MongoStore = require('connect-mongo')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
@@ -51,6 +52,9 @@ app.use('/api/cards', cardRoute)
 app.get('/', function (req, res) {
     res.send('Home')
 })
+
+//uncomment to see all routes
+//console.log(listEndpoints(app));
 
 mongoose.connect(`mongodb+srv://${USER}:${PASSWORD}@backenddb.hldza.mongodb.net/${project_name}?retryWrites=true&w=majority&appName=BackendDB`)
 .then(() => {
