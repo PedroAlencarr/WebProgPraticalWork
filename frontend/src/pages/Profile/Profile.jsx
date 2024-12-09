@@ -7,6 +7,7 @@ import {
   TextField,
 } from '@mui/material';
 import { styled } from '@mui/system';
+import CustomButton from '../../components/CustomButton/CustomButton';
 import Arrow from '../../assets/images/arrow-icon.png';
 import Edit from '../../assets/images/edit-icon.png';
 import UserIcon from '../../assets/images/user-icon.png';
@@ -15,7 +16,7 @@ import PassIcon from '../../assets/images/pass-icon.png';
 import TasksIcon from '../../assets/images/task-icon.png';
 import LogoutIcon from '../../assets/images/logout-icon.png';
 import { AuthContext } from '../../context/AuthContext';
-//import { handleLogout} from '../../components/Header/Header'
+import { useNavigate } from 'react-router-dom';
 
 const Section = styled(Box)({
   display: 'flex',
@@ -44,20 +45,6 @@ const FieldBox = styled(Box)(({ theme }) => ({
     width: "300px",
     marginRight: '0px'
 }}));
-
-const LogoutButton = styled(Button)(({ theme }) => ({
-  backgroundColor: '#FED36A',
-  color: '#212832',
-  width: '35%',
-  height: '50px',
-  fontWeight: 400,
-  marginTop: theme.spacing(4),
-  '&:hover': {
-    backgroundColor: '#fac746',
-  },"@media (max-width: 600px)": {
-    width: "300px",
-}
-}));
 
 const EditableField = ({ label, value, onSave, icon, isPassword = false }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -100,7 +87,8 @@ const EditableField = ({ label, value, onSave, icon, isPassword = false }) => {
 };
 
 export default function Profile() {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, logoutUser } = useContext(AuthContext);
+  const navigate = useNavigate()
 
   const handleUpdateField = async (field, value) => {
     try {
@@ -123,6 +111,10 @@ export default function Profile() {
       console.error('Error updating field:', error);
     }
   };
+
+  const handleLogout = () => {
+    logoutUser(navigate)
+  }
 
   return (
     <Section sx={{ marginTop: '50px', marginBottom: '50px' }}>
@@ -149,23 +141,8 @@ export default function Profile() {
         icon={UserIcon}
       />
 
-      <EditableField
-        label="Email"
-        value={user.email}
-        onSave={() => alert('Não é permitido alterar o e-mail.')}
-        icon={EmailIcon}
-      />
-
-      <EditableField
-        label="Password"
-        value="Password"
-        onSave={(value) => handleUpdateField('password', value)}
-        icon={PassIcon}
-        isPassword
-      />
-
       <FieldBox>
-        <img src={TasksIcon} alt="My Tasks" style={{ width: '22px', height: '24px' }} />
+        <img src={EmailIcon} alt="Email" style={{ width: '22px', height: '24px' }} />
         <Typography
           sx={{
             flexGrow: 1,
@@ -175,16 +152,20 @@ export default function Profile() {
             fontWeight: '300',
           }}
         >
-          My Tasks
+          {user.email}
         </Typography>
-        <IconButton>
-          <img src={Arrow} alt="Arrow" style={{ width: '22px', height: '24px' }} />
-        </IconButton>
       </FieldBox>
 
-      <LogoutButton startIcon={<img src={LogoutIcon} alt="Logout" style={{ width: '22px', height: '22px' }} />}>
-        Logout
-      </LogoutButton>
+
+      <EditableField
+        label="Password"
+        value="Password"
+        onSave={(value) => handleUpdateField('password', value)}
+        icon={PassIcon}
+        isPassword
+      />
+
+      <CustomButton startIcon={<img src={LogoutIcon} alt="Logout" style={{ width: '22px', height: '22px' }} />} variantStyle='filled' text='Logout' onClick={handleLogout}/>
     </Section>
   );
 }
