@@ -13,7 +13,7 @@ const isAuthenticated = require("../middlewares/auth");
 
 router.get('/current', isAuthenticated, getBoardsByUserId);
 router.get("/", isAuthenticated, getBoards);
-router.get("/:id", getBoardById);
+router.get("/:id", isAuthenticated, getBoardById);
 router.post("/", isAuthenticated, createBoard);
 router.patch("/:id", updateBoard);
 router.delete("/:id", deleteBoard);
