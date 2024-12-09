@@ -23,8 +23,6 @@ import CustomField from '../../components/CustomField/CustomField';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext.jsx';
 
-const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
-
 const StyledLink = styled(Link)(() => ({
     color: '#FED36A',
     textDecoration: 'none',
@@ -35,7 +33,7 @@ const StyledLink = styled(Link)(() => ({
 
 export default function Login() {
     const navigate = useNavigate();
-    const { fetchUser } = useContext(AuthContext);
+    const { loginUser } = useContext(AuthContext);
 
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -59,43 +57,15 @@ export default function Login() {
         password: '',
     };
 
-    const handleSubmit = async (values, { resetForm }) => {
+    const handleSubmit =  (values, { resetForm }) => {
         const email = values.email;
         const password = values.password;
 
-        try {
-            const response = await fetch(`${VITE_BACK_URL}/api/users/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                }),
-                credentials: 'include',
-            });
-    
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Login realizado com sucesso', data);
-
-                fetchUser()
-                navigate('/boards');
-            } else {
-                const errorData = await response.json();
-                console.log('Erro no login:', errorData.message);
-            }
-
-            resetForm();
-        } catch (error) {
-            console.error('Erro ao fazer login:', error);
-        }
+        loginUser(email, password, resetForm, navigate)
     };
 
     return (
         <Container
-            className='login'
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -146,6 +116,7 @@ export default function Login() {
                                 type="email"
                                 error={touched.email && Boolean(errors.email)}
                                 helperText={<ErrorMessage name="email" />}
+                                autoComplete="current-password"
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
@@ -162,6 +133,7 @@ export default function Login() {
                                 type={showPassword ? 'text' : 'password'}
                                 error={touched.password && Boolean(errors.password)}
                                 helperText={<ErrorMessage name="password" />}
+                                autoComplete="current-password"
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">

@@ -19,9 +19,11 @@ const USER = process.env.USER
 const PASSWORD = process.env.PASSWORD
 const PORT = process.env.PORT
 const FRONT_URL = process.env.FRONT_URL
+const NODE_ENV = process.env.NODE_ENV
 const project_name = 'Node-API'
 
 // middlewares
+app.set("trust proxy",1);
 app.use(express.json())
 app.use(cors({
   origin: FRONT_URL,
@@ -38,7 +40,8 @@ app.use(
     cookie: {
       httpOnly: true, // Protege contra XSS
       maxAge: 1000 * 60 * 60 * 24, // 1 dia
-      secure: false,
+      secure: NODE_ENV === 'production' ? true : false,
+      sameSite: NODE_ENV === 'production' ? 'none' : undefined,
     },
   })
 );

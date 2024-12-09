@@ -6,6 +6,7 @@ import Footer from './components/Footer/Footer.jsx';
 import Home from './pages/Home/Home.jsx';
 import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
+import Boards from './pages/Boards/Boards.jsx';
 import Profile from './pages/Profile/Profile.jsx';
 import TaskCreation from './pages/TaskCreation/TaskCreation.jsx'
 import ProjectDetails from './pages/ProjectDetails/ProjectDetails.jsx';
@@ -43,10 +44,18 @@ function App() {
               }
             />
             <Route
-              path="/profile"
+              path="/boards"
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <Boards />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/projectdetails/:id"
+              element={
+                <ProtectedRoute>
+                  <ProjectDetails />
                 </ProtectedRoute>
               }
             />
@@ -59,10 +68,10 @@ function App() {
               }
             />
             <Route
-              path="/projectdetails"
+              path="/profile"
               element={
                 <ProtectedRoute>
-                  <ProjectDetails />
+                  <Profile />
                 </ProtectedRoute>
               }
             />
