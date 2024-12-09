@@ -45,6 +45,7 @@ O **Day Task** permite que os usuários organizem suas tarefas em boards com sta
 - Vite.js para o build do frontend.
 - MUI - biblioteca de componentes do frontend.
 - Formik para formulários.
+- Yup para validação de esquemas.
 
 ---
 
@@ -52,10 +53,10 @@ O **Day Task** permite que os usuários organizem suas tarefas em boards com sta
 
 A equipe responsável pelo desenvolvimento deste projeto:  
 
-- **Maria Eduarda Betman**  
-- **Pedro Henrique Alencar Ramos**  
-- **Rafael Ribeiro de Lima**  
-- **Rodrigo Ciuffo**  
+- **Maria Eduarda Betman Damazio Jaques. Matricula: 20230514**  
+- **Pedro Henrique Alencar Ramos. Matricula: 23204610**  
+- **Rafael Ribeiro de Lima. Matricula: 23203995**  
+- **Rodrigo Ciuffo Sento Sé. Matricula: 23202848**  
 
 ---  
 
