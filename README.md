@@ -1,8 +1,8 @@
 # **Day Task**  
 
- Link do projeto no GitHub: https://github.com/PedroAlencarr/WebProgPraticalWork
- Link do site no frontend: https://web-prog-pratical-work-taupe.vercel.app
- Link da API do backend: https://webprogpraticalwork-backend.onrender.com/
+- Link do projeto no GitHub: https://github.com/PedroAlencarr/WebProgPraticalWork
+- Link do site no frontend: https://web-prog-pratical-work-taupe.vercel.app
+- Link da API do backend: https://webprogpraticalwork-backend.onrender.com/
 
 Uma aplicação de Kanban colaborativa, simples e eficiente para gerenciamento de tarefas.  
 
