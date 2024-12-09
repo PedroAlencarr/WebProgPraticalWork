@@ -8,7 +8,8 @@ const {
   updateBoard,
   getBoardsByUserId,
   addContribuitorToBoard,
-  removeContribuitorFromBoard
+  removeContribuitorFromBoard,
+  getContribuitors
 } = require("../controllers/board.controller.js");
 const isAuthenticated = require("../middlewares/auth");
 
@@ -17,6 +18,7 @@ router.get("/:id", isAuthenticated, getBoardById);
 router.post("/", isAuthenticated, createBoard);
 router.post('/:boardId/add_user', isAuthenticated, addContribuitorToBoard);
 router.post('/:boardId/remove_user', isAuthenticated, removeContribuitorFromBoard);
+router.get('/:boardId/getUsers', isAuthenticated, getContribuitors);
 router.patch("/:id", isAuthenticated, updateBoard);
 router.delete("/:id", isAuthenticated, deleteBoard);
 

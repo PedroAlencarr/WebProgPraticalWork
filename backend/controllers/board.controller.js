@@ -193,6 +193,26 @@ const removeContribuitorFromBoard = async (req, res) => {
   }
 }
 
+const getContribuitors = async (req, res) => {
+  try {
+    const { boardId } = req.params; 
+    const board = await Board.findById(boardId);
+
+    if (!board) {
+      return res.status(404).json({ message: "Board não encontrado" });
+    }
+
+    const collaborators = await User.find({
+      '_id': { $in: board.sharedWith }
+    });
+
+    res.status(200).json(collaborators);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao buscar colaboradores", error });
+  }
+};
+
 module.exports = {
   getBoardById,
   createBoard,
@@ -201,4 +221,5 @@ module.exports = {
   getBoardsByUserId,
   addContribuitorToBoard,
   removeContribuitorFromBoard,
+  getContribuitors
 };
