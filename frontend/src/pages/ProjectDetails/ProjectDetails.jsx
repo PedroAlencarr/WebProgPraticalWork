@@ -7,6 +7,7 @@ import AddCollaboratorModal from "../../components/AddCollaboratorModal/AddColla
 import TaskCreation from "../TaskCreation/TaskCreation";
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext.jsx';
+import CardTask from "../../components/TaskCard/TaskCard.jsx";
 
 const Section = styled(Box)({
   display: "flex",
@@ -24,6 +25,7 @@ const TextBox = styled(Box)({
 const ProgressBox = styled(Box)({
   display: "flex",
   flexDirection: "row",
+  gap: '1rem',
   width: "100%",
   margin: "30px 0",
   "@media (max-width: 540px)": {
@@ -37,6 +39,9 @@ const ProgressBox = styled(Box)({
 const Board = styled(Box)({
   width: "100%",
   height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  gap: '1rem',
 });
 
 const BoardHeader = styled(Typography)({
@@ -92,6 +97,41 @@ export default function ProjectDetails() {
 
   const handleModalClose = () => {
     setOpen(false);
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/cards/${taskId}`, { 
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        fetchTasks(id)
+        showMessage('Task successful deleted!', 'success');
+      }
+    } catch (error) {
+      const errorMessage = error?.message || 'Ocorreu um erro desconhecido';
+      showMessage(errorMessage, 'error');
+    }
+  };
+  
+  const handleStatusChange = async (taskId, status) => {
+    console.log(taskId, status)
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/cards/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ['status']: status }),
+        credentials: 'include',
+      });
+      if (response.ok) {
+        fetchTasks(id)
+        showMessage('Task successful updated!', 'success');
+      }
+    } catch (error) {
+      const errorMessage = error?.message || 'Ocorreu um erro desconhecido';
+      showMessage(errorMessage, 'error');
+    }
   };
 
   const fetchCollaborators = async (boardId) => {
@@ -236,25 +276,53 @@ export default function ProjectDetails() {
         <Board>
           <BoardHeader>Rejected</BoardHeader>
           {backlogTasks.map((task) => (
-            <p>{task.title}</p>
+            <CardTask
+              key={task._id}
+              id={task._id}
+              title={task.title}
+              description={task.description}
+              onDelete={handleDeleteTask}
+              onChangeStatus={handleStatusChange}
+            />
           ))}
         </Board>
         <Board>
           <BoardHeader>To Do</BoardHeader>
           {todoTasks.map((task) => (
-            <p>{task.title}</p>
+            <CardTask
+              key={task._id}
+              id={task._id}
+              title={task.title}
+              description={task.description}
+              onDelete={handleDeleteTask}
+              onChangeStatus={handleStatusChange}
+          />
           ))}
         </Board>
         <Board>
           <BoardHeader>Doing</BoardHeader>
           {doingTasks.map((task) => (
-            <p>{task.title}</p>
+            <CardTask
+              key={task._id}
+              id={task._id}
+              title={task.title}
+              description={task.description}
+              onDelete={handleDeleteTask}
+              onChangeStatus={handleStatusChange}
+          />
           ))}
         </Board>
         <Board>
           <BoardHeader>Done</BoardHeader>
           {doneTasks.map((task) => (
-            <p>{task.title}</p>
+            <CardTask
+              key={task._id}
+              id={task._id}
+              title={task.title}
+              description={task.description}
+              onDelete={handleDeleteTask}
+              onChangeStatus={handleStatusChange}
+          />
           ))}
         </Board>
       </ProgressBox>
