@@ -20,6 +20,4 @@ router.post('/:boardId/remove_user', isAuthenticated, removeContribuitorFromBoar
 router.patch("/:id", isAuthenticated, updateBoard);
 router.delete("/:id", isAuthenticated, deleteBoard);
 
-
-
 module.exports = router;
