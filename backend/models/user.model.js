@@ -25,14 +25,6 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    
-    board: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Board",
-        required: false,
-      },
-    ],
   },
 
   {
