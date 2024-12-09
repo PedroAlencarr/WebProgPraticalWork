@@ -66,9 +66,10 @@ const updateBoard = async (req, res) => {
     }
 
     const id = req.params.id;
-    const update_board = await Board.findByIdAndUpdate(id, req.body, { new: true });
+    const updateBoard = await Board.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedBoard = await Board.findById(req.params.id);
 
-    res.status(200).json(board);
+    res.status(200).json(updateBoard);
 
   } catch (error) {
       res.status(500).json({ error: error.message });
@@ -138,13 +139,68 @@ const addContribuitorToBoard = async (req, res) => {
     }
     
     const addedUserId = addedUser._id
+    console.log(addedUserId)
+    console.log(board.createdBy.toString() == addedUserId.toString())
+    console.log(board.createdBy.toString())
+    console.log(addedUserId.toString())
+
+    if (board.createdBy.toString() == addedUserId.toString()) {
+      return res.status(400).json({ message: "Usuário já é proprietário do board" });
+    }
 
     if (board.sharedWith.includes(addedUserId)) {
       return res.status(400).json({ message: "Usuário já é contribuidor do board" });
     }
 
-    board.sharedWith.push(addedUserId)
+    // Atualizar o board para adicionar o userId no shareWith
+    const updatedBoard = await Board.findByIdAndUpdate(
+      boardId,
+      { $addToSet: { sharedWith: addedUserId } }, // $addToSet evita duplicados no array
+      { new: true } // Retorna o board atualizado
+    );
     res.status(200).json({ message: "Usuário adicionado ao board com sucesso" });
+  } catch (err) {
+    res.status(500).json({ message: "Erro ao adicionar usuário ao board", error: err });
+  }
+}
+
+const removeContribuitorFromBoard = async (req, res) => {  
+  try {
+    const { removedUserEmail } = req.body;
+    const { boardId } = req.params
+    const userId = req.userId
+
+    const board = await Board.findById(boardId);
+    if (!board) {
+      return res.status(404).json({ message: "Board não encontrado" });
+    }
+
+    if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
+      return res.status(401).json({ message: "Acesso negado" });
+    }
+
+    const removedUser = await User.findOne({ email: removedUserEmail })
+    if (!removedUser) {
+      return res.status(404).json({ message: "Usuário já não tem acesso ao board" });
+    }
+    
+    const removedUserId = removedUser._id
+
+    if (board.createdBy == removedUserId) {
+      return res.status(400).json({ message: "O proprietário do board não pode ser removido" });
+    }
+
+    if (!board.sharedWith.includes(removedUserId)) {
+      return res.status(400).json({ message: "Usuário já não é contribuidor do board" });
+    }
+
+    // Atualizar o board para adicionar o userId no shareWith
+    const updatedBoard = await Board.findByIdAndUpdate(
+      boardId,
+      { $pull: { sharedWith: removedUserId } }, // 
+      { new: true } // Retorna o board atualizado
+    );
+    res.status(200).json({ message: "Usuário removido do board com sucesso" });
   } catch (err) {
     res.status(500).json({ message: "Erro ao adicionar usuário ao board", error: err });
   }
@@ -160,5 +216,6 @@ module.exports = {
   updateBoard,
   deleteBoard,
   getBoardsByUserId,
-  addContribuitorToBoard
+  addContribuitorToBoard,
+  removeContribuitorFromBoard,
 };
