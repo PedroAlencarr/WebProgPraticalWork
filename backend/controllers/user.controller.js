@@ -1,27 +1,24 @@
 const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 
-
-const getUsers = async (req, res) => { 
-    try {
-        const users = await User.find({})
-        res.status(200).send(users)
-    } catch(error) {
-        res.status(500).json({error: error.message})
-    }
-}
-
-
 const getUser = async (req, res) => {
     try {
+        const userId = req.userId
         const id = req.params.id
+        if (id !== userId) {
+            return res.status(403).json({ message: 'Você não tem permissão para visualizar este usuário!' })
+        }
+        
         const user = await User.findById(id)
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
         res.status(200).json(user)
     } catch(error) {
         res.status(500).json({error: error.message})
     }
 }
-
+ 
 const createUser = async (req, res) => {
 
     const { email, first_name, last_name, password } = req.body

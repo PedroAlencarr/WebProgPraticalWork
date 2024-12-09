@@ -39,15 +39,6 @@ const createCard = async (req, res) => {
   }
 };
 
-const getCards = async (req, res) => {
-  try {
-    const cards = await Card.find({});
-    res.status(200).json(cards);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
 const getCardsByBoard = async (req, res) => {
   try {
     const userId = req.userId;
@@ -123,7 +114,6 @@ const deleteCard = async (req, res) => {
 
 module.exports = {
   createCard,
-  getCards,
   updateCard,
   deleteCard,
   getCardsByBoard

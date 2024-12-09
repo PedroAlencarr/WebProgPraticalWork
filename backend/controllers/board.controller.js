@@ -2,15 +2,6 @@ const Board = require("../models/board.model.js");
 const Card = require("../models/card.model.js");
 const User = require("../models/user.model.js");
 
-const getBoards = async (req, res) => {
-  try {
-    const boards = await Board.find({});
-    res.status(200).json(boards);
-  } catch (err) {
-    res.status(500).json({ message: "Erro ao buscar boards", error: err });
-  }
-};
-
 const getBoardById = async (req, res) => {
   const userId = req.userId
   try {
@@ -54,8 +45,8 @@ const createBoard = async (req, res) => {
 };
 
 const updateBoard = async (req, res) => {
-  const userId = req.userId
   try {
+    const userId = req.userId
     const board = await Board.findById(req.params.id);
     if (!board) {
       return res.status(404).json({ message: "Board não encontrado" });
@@ -77,8 +68,8 @@ const updateBoard = async (req, res) => {
 };
 
 const deleteBoard = async (req, res) => {
-  const userId = req.userId
   try {
+    const userId = req.userId
     const board = await Board.findById(req.params.id);
     if (!board) {
       return res.status(404).json({ message: "Board não encontrado" });
@@ -104,7 +95,7 @@ const deleteBoard = async (req, res) => {
 const getBoardsByUserId = async (req, res) => {
   try {
     const userId = req.userId
-    
+
     const boards = await Board.find({
       $or: [
         { createdBy: userId }, 
@@ -139,10 +130,6 @@ const addContribuitorToBoard = async (req, res) => {
     }
     
     const addedUserId = addedUser._id
-    console.log(addedUserId)
-    console.log(board.createdBy.toString() == addedUserId.toString())
-    console.log(board.createdBy.toString())
-    console.log(addedUserId.toString())
 
     if (board.createdBy.toString() == addedUserId.toString()) {
       return res.status(400).json({ message: "Usuário já é proprietário do board" });
@@ -206,31 +193,7 @@ const removeContribuitorFromBoard = async (req, res) => {
   }
 }
 
-const getContribuitors = async (req, res) => {
-  try {
-    const { boardId } = req.params; 
-    const board = await Board.findById(boardId);
-
-    if (!board) {
-      return res.status(404).json({ message: "Board não encontrado" });
-    }
-
-    const collaborators = await User.find({
-      '_id': { $in: board.sharedWith }
-    });
-
-    res.status(200).json(collaborators);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erro ao buscar colaboradores", error });
-  }
-};
-
-
-
-
 module.exports = {
-  getBoards,
   getBoardById,
   createBoard,
   updateBoard,
@@ -238,5 +201,4 @@ module.exports = {
   getBoardsByUserId,
   addContribuitorToBoard,
   removeContribuitorFromBoard,
-  getContribuitors
 };
