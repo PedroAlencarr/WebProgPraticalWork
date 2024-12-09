@@ -11,7 +11,7 @@ const getUsers = async (req, res) => {
     }
 }
 
-// apagar antes da entrega
+
 const getUser = async (req, res) => {
     try {
         const id = req.params.id
