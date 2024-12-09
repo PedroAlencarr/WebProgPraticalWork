@@ -19,15 +19,13 @@ const getBoardById = async (req, res) => {
       return res.status(404).json({ message: "Board não encontrado" });
     }
 
-    const isAuthorized =
-      board.createdBy.toString() === userId || // É o criador?
-      board.sharedWith.some((id) => id.toString() === userId); // Está na lista de compartilhamento?
+    console.log(board.sharedWith.includes(userId))
 
-    if (!isAuthorized) {
+    if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
       return res.status(401).json({ message: "Acesso negado" });
     }
 
-    res.status(200).res.send(board);
+    res.status(200).json(board);
   } catch (err) {
     res.status(500).json({ message: "Erro ao buscar board", error: err });
   }
