@@ -1,4 +1,6 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import { styled } from "@mui/system";
 import { Box, Typography, Button } from "@mui/material";
 
@@ -67,11 +69,34 @@ const AddTaskButton = styled(Button)({
 });
 
 export default function ProjectDetails() {
+  const { id } = useParams();
+  const [board, setBoard] = useState(null);
+
+  const fetchBoard = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/boards/${id}`, {
+          credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Erro ao buscar board');
+      }
+      const data = await response.json();
+      setBoard(data);
+    } catch (error) {
+      console.error('Erro ao buscar board:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBoard();
+  }, []);
+
+  console.log(board)
   return (
     <Section>
       <TextBox>
         <Typography variant="h1" sx={{ fontSize: "32px", fontWeight: 600 }}>
-          Placeholder Project Title
+          Teste
         </Typography>
         <Typography variant="h2" sx={{ fontSize: "20px", fontWeight: 500, mt: 2, mb: 2 }}>
           Project Details

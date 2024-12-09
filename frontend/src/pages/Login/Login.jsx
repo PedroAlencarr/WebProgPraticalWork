@@ -95,7 +95,6 @@ export default function Login() {
 
     return (
         <Container
-            className='login'
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
