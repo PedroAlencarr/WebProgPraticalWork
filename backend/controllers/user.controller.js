@@ -206,7 +206,6 @@ const getCurrentUser = async (req, res) => {
 };
 
 module.exports = {
-    getUsers,
     getUser,
     createUser,
     updateUser,
