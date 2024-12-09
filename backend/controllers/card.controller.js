@@ -3,7 +3,8 @@ const Board = require("../models/board.model.js");
 
 const createCard = async (req, res) => {
   try {
-    const { title, description, status } = req.body;
+    const { title, description } = req.body;
+    var { status } = req.body;
     const { boardId } = req.params;
     const userId = req.userId;
     

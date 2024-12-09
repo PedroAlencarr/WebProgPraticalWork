@@ -117,6 +117,41 @@ const getBoardsByUserId = async (req, res) => {
   }
 }
 
+const addContribuitorToBoard = async (req, res) => {  
+  try {
+    const { addedUserEmail } = req.body;
+    const { boardId } = req.params
+    const userId = req.userId
+
+    const board = await Board.findById(boardId);
+    if (!board) {
+      return res.status(404).json({ message: "Board não encontrado" });
+    }
+
+    if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
+      return res.status(401).json({ message: "Acesso negado" });
+    }
+
+    const addedUser = await User.findOne({ email: addedUserEmail })
+    if (!addedUser) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+    
+    const addedUserId = addedUser._id
+
+    if (board.sharedWith.includes(addedUserId)) {
+      return res.status(400).json({ message: "Usuário já é contribuidor do board" });
+    }
+
+    board.sharedWith.push(addedUserId)
+    res.status(200).json({ message: "Usuário adicionado ao board com sucesso" });
+  } catch (err) {
+    res.status(500).json({ message: "Erro ao adicionar usuário ao board", error: err });
+  }
+}
+
+
+
 
 module.exports = {
   getBoards,
@@ -125,4 +160,5 @@ module.exports = {
   updateBoard,
   deleteBoard,
   getBoardsByUserId,
+  addContribuitorToBoard
 };
