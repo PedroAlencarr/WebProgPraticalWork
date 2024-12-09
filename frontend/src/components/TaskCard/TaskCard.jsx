@@ -3,7 +3,6 @@ import { Card, CardContent, Typography, Box, IconButton, Menu, MenuItem } from '
 import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 export default function CardTask({ id, title, description, onDelete, onChangeStatus }) {
-  console.log(id)
   const [anchorEl, setAnchorEl] = useState(null);
   
   const handleMenuOpen = (event) => {
@@ -80,7 +79,7 @@ export default function CardTask({ id, title, description, onDelete, onChangeSta
         <MenuItem onClick={() => handleChangeStatus('To Do')}>To Do</MenuItem>
         <MenuItem onClick={() => handleChangeStatus('Doing')}>Doing</MenuItem>
         <MenuItem onClick={() => handleChangeStatus('Done')}>Done</MenuItem>
-        <MenuItem onClick={handleDelete}>Delete Task</MenuItem>
+        <MenuItem sx={{color: 'red'}} onClick={handleDelete}>Delete Task</MenuItem>
       </Menu>
     </Card>
   );

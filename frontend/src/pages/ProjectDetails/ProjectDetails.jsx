@@ -8,6 +8,9 @@ import TaskCreation from "../TaskCreation/TaskCreation";
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext.jsx';
 import CardTask from "../../components/TaskCard/TaskCard.jsx";
+import { calculateProgress } from "../../utils/CalculateProgress.jsx";
+import CustomButton from "../../components/CustomButton/CustomButton.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Section = styled(Box)({
   display: "flex",
@@ -86,10 +89,12 @@ export default function ProjectDetails() {
   const { id } = useParams();
   const [board, setBoard] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [progress, setProgress] = useState(0);
   const [collaborators, setCollaborators] = useState([]);
   const [addCollaboratorModalOpen, setAddCollaboratorModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, showMessage } = useContext(AuthContext);
+  const navigate = useNavigate()
 
   const handleModalOpen = () => {
     setOpen(true);
@@ -97,6 +102,22 @@ export default function ProjectDetails() {
 
   const handleModalClose = () => {
     setOpen(false);
+  };
+
+  const handleDeleteBoard = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/boards/${id}`, { 
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        showMessage('Board successful deleted!', 'success');
+        navigate('/boards')
+      }
+    } catch (error) {
+      const errorMessage = error?.message || 'Erro';
+      showMessage(errorMessage, 'error');
+    }
   };
 
   const handleDeleteTask = async (taskId) => {
@@ -110,7 +131,7 @@ export default function ProjectDetails() {
         showMessage('Task successful deleted!', 'success');
       }
     } catch (error) {
-      const errorMessage = error?.message || 'Ocorreu um erro desconhecido';
+      const errorMessage = error?.message || 'Erro';
       showMessage(errorMessage, 'error');
     }
   };
@@ -129,7 +150,7 @@ export default function ProjectDetails() {
         showMessage('Task successful updated!', 'success');
       }
     } catch (error) {
-      const errorMessage = error?.message || 'Ocorreu um erro desconhecido';
+      const errorMessage = error?.message || 'Erro';
       showMessage(errorMessage, 'error');
     }
   };
@@ -166,7 +187,7 @@ export default function ProjectDetails() {
       fetchCollaborators(id);
       setAddCollaboratorModalOpen(false);
     } catch (error) {
-      const errorMessage = error?.message || 'Ocorreu um erro desconhecido';
+      const errorMessage = error?.message || 'Erro';
       showMessage(errorMessage, 'error');
     }
   };
@@ -185,7 +206,7 @@ export default function ProjectDetails() {
       showMessage('Collaborator successful removed!', 'success');
       fetchCollaborators(id);
     } catch (error) {
-      const errorMessage = error?.message || 'Ocorreu um erro desconhecido';
+      const errorMessage = error?.message || 'Erro';
       showMessage(errorMessage, 'error');
   };
 };
@@ -218,6 +239,8 @@ export default function ProjectDetails() {
       }
       const data = await response.json();
       setTasks(data);
+      const progressValue = calculateProgress(data);
+      setProgress(progressValue);
     } catch (error) {
       console.error("Erro ao buscar tasks:", error);
     }
@@ -251,16 +274,16 @@ export default function ProjectDetails() {
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', width: 'fit-content', }}>
             <Box sx={{ width: '100%', mr: 1 }}>
-              <CircularProgress sx={{ color: '#FED36A' }} variant="determinate" value={50} />
+              <CircularProgress sx={{ color: '#FED36A' }} variant="determinate" value={progress} />
             </Box>
-            <Typography variant="p" color="#fff">{`${100}%`}</Typography>
+            <Typography variant="p" color="#fff">{`${progress}%`}</Typography>
         </Box>
         <CollaboratorsBox>
           <Typography variant="h2" sx={{ fontSize: "20px", fontWeight: 500 }}>
             Collaborators
           </Typography>
           {collaborators.map((collaborator) => (
-            <CollaboratorItem key={collaborator.id}>
+            <CollaboratorItem key={collaborator._id}>
               {collaborator.email}
               {(board?.createdBy.toString() === user._id.toString()) && (
                 <IconButton onClick={() => removeCollaborator(collaborator.email)}>
@@ -332,23 +355,32 @@ export default function ProjectDetails() {
           display: 'flex', 
           flexDirection: 'column', 
           gap: '2rem',
+          width: 'fit-content',
           marginTop: '2rem',
         }}>
         <Box className="button__div" >
-          <AddTaskButton onClick={handleModalOpen}>Add Task</AddTaskButton>
+          <CustomButton onClick={handleModalOpen} variantStyle="filled" text="Add Task" fullWidth sx={{padding: '.5rem 1rem'}}/>
         </Box>
 
-        <TaskCreation open={open} onClose={handleModalClose} id={id}/>
+        <TaskCreation open={open} onClose={handleModalClose} id={id} fetchTasks={fetchTasks}/>
 
-        <Box>
-          <AddTaskButton onClick={() => setAddCollaboratorModalOpen(true)}>Add Collaborator</AddTaskButton>
-        </Box>
+        {(board?.createdBy.toString() === user._id.toString()) && (
+          <Box>
+            <CustomButton onClick={() => setAddCollaboratorModalOpen(true)} variantStyle="filled" text="Add Collaborator" fullWidth sx={{padding: '.5rem 1rem'}}/>
+          </Box>
+        )}
 
         <AddCollaboratorModal
           open={addCollaboratorModalOpen}
           onClose={() => setAddCollaboratorModalOpen(false)}
           onSubmit={addCollaborator}
         />
+
+        {(board?.createdBy.toString() === user._id.toString()) && (
+          <Box>
+            <CustomButton onClick={handleDeleteBoard} variantStyle="filled" text="Delete Board" fullWidth sx={{backgroundColor: 'red', padding: '.5rem 1rem', color: 'white'}}/>
+          </Box>
+        )}
       </Box>
     </Section>
   );

@@ -4,6 +4,7 @@ import { Typography, Box, Container, styled } from '@mui/material';
 import CustomButton from '../../components/CustomButton/CustomButton.jsx';
 import BoardCard from '../../components/BoardCard/BoardCard.jsx';
 import AddBoardModal from '../../components/AddBoard/AddBoard.jsx';
+import { calculateProgress } from '../../utils/CalculateProgress.jsx';
 
 const StyledCardsBox = styled('div')(({ theme }) => ({
     display: 'grid',
@@ -31,7 +32,25 @@ export default function BoardsPage() {
         throw new Error('Erro ao buscar boards');
       }
       const data = await response.json();
-      setBoards(data);
+
+      const boardsWithProgress = await Promise.all(
+        data.map(async (board) => {
+          try {
+            const tasksResponse = await fetch(`${import.meta.env.VITE_BACK_URL}/api/cards/${board._id}`, {
+              credentials: 'include',
+            });
+  
+            const tasks = await tasksResponse.json();
+            const progress = calculateProgress(tasks);
+  
+            return { ...board, progress: progress ?? 0, key: board._id };
+          } catch {
+            return { ...board, progress: 0, key: board._id };
+          }
+        })
+      );
+
+      setBoards(boardsWithProgress);
     } catch (error) {
       console.error('Erro ao buscar boards:', error);
     }
@@ -98,7 +117,7 @@ export default function BoardsPage() {
                     lineHeight: '27.5px',
                     color: '#fff',
                 }}>
-                {user.first_name}!
+                {`${user.first_name} ${user.last_name}`}
             </Typography>
         </Box>
         <StyledCardsBox>
