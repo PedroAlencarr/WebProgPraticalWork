@@ -18,6 +18,9 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import CustomField from '../../components/CustomField/CustomField';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
 
@@ -31,6 +34,8 @@ const StyledLink = styled(Link)(() => ({
 
 export default function Register() {
     const [showPassword, setShowPassword] = React.useState(false);
+    const { showMessage } = useContext(AuthContext);
+    const navigate = useNavigate()
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -73,11 +78,11 @@ export default function Register() {
             }
     
             const data = await response.json();
-            console.log('User created:', data);
-    
+            showMessage('Successful register!', 'success');
+            navigate('/login')
             resetForm();
         } catch (error) {
-            console.log('Error:', error);
+            showMessage(`Error: ${error}`, 'error');
         }
     };
 

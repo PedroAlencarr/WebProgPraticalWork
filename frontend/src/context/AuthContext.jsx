@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import SnackbarMessage from '../components/SnackBar/SnackBar';
 
 export const AuthContext = createContext();
 
@@ -9,6 +10,15 @@ export const AuthProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [loading, setLoading] = useState(true);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+   const showMessage = (message, severity) => {
+    setSnackbar({ open: true, message, severity });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const loginUser = async (email, password, resetForm, navigate) => {
     setLoading(true);
@@ -24,17 +34,17 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         fetchUserCurrent()
-        console.log('Login realizado com sucesso:');
+        showMessage('Successful login!', 'success');
         resetForm();
         navigate('/boards');
       } else {
         const errorData = await response.json();
-        console.log('Erro no login:', errorData.message);
+        showMessage(errorData.message, 'error');
       }
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+        showMessage(error, 'error');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
@@ -50,18 +60,18 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        console.log('Logout realizado com sucesso');
+        showMessage('Successful logout!', 'success');
         setUser(null);
         localStorage.removeItem('user');
         navigate('/login');
       } else {
         const errorData = await response.json();
-        console.log('Erro no logout:', errorData.message);
+        showMessage(errorData.message, 'error');
       }
     } catch (error) {
-      console.error('Erro ao fazer logout:', error);
+        showMessage(error, 'error');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
@@ -108,8 +118,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loginUser, logoutUser, loading }}>
+    <AuthContext.Provider value={{ user, setUser, loginUser, logoutUser, loading, showMessage }}>
       {children}
+      <SnackbarMessage
+        open={snackbar.open}
+        onClose={handleCloseSnackbar}
+        message={snackbar.message}
+        severity={snackbar.severity}
+      />
     </AuthContext.Provider>
   );
 };

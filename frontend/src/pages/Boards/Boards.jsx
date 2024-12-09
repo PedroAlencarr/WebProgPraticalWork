@@ -19,7 +19,7 @@ const StyledCardsBox = styled('div')(({ theme }) => ({
 
 export default function BoardsPage() {
   const [boards, setBoards] = useState([]);
-  const { user } = useContext(AuthContext);
+  const { user, showMessage } = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
 
   const fetchBoards = async () => {
@@ -55,14 +55,14 @@ export default function BoardsPage() {
       });
 
       if (response.ok) {
-        alert('Board adicionado com sucesso!');
+        showMessage('Board successfully created!', 'success');
         setOpenModal(false);
         fetchBoards()
       } else {
-        alert('Erro ao adicionar o board');
+        showMessage('Error creating the board!', 'error');
       }
     } catch (error) {
-      console.error('Erro ao adicionar o board:', error);
+        showMessage('Error creating the board!', 'error');
     }
   };
   return (
