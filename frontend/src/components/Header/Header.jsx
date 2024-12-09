@@ -35,32 +35,11 @@ const StyledMenuItemDesktop = styled(MenuItem)(() => ({
 export default function Header() {
     const appBarRef = useRef(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { user, setUser } = useContext(AuthContext);
+    const { user, logoutUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/users/logout`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-            });
-    
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Logout realizado com sucesso', data);
-                setUser(null)
-
-                navigate('/login');
-            } else {
-                const errorData = await response.json();
-                console.log('Erro no logout:', errorData.message);
-            }
-        } catch (error) {
-            console.error('Erro ao fazer logout:', error);
-        }
+    const handleLogout = () => {
+        logoutUser(navigate)
     };
 
     const menuItems = user
