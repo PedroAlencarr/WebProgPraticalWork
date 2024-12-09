@@ -131,11 +131,19 @@ export default function Profile() {
       </Typography>
 
       <EditableField
-        label="Name"
-        value={`${user.first_name} ${user.last_name}`}
+        label="First Name"
+        value={user.first_name}
         onSave={(value) => {
-          const [first_name, ...last_nameParts] = value.split(' ');
           handleUpdateField('first_name', first_name);
+        }}
+        icon={UserIcon}
+      />
+
+      <EditableField
+        label="Last Name"
+        value={user.last_name}
+        onSave={(value) => {
+          const [...last_nameParts] = value.split(' ');
           handleUpdateField('last_name', last_nameParts.join(' '));
         }}
         icon={UserIcon}

@@ -18,8 +18,8 @@ const validationSchema = Yup.object({
     task_details: Yup.string().required('Task Detailment is required'),
 });
 
-const TaskCreation = ({open, onClose, onTaskCreated, id }) => {
-    const { user } = useContext(AuthContext);
+const TaskCreation = ({open, onClose, onTaskCreated, id, fetchTasks }) => {
+    const { user, showMessage } = useContext(AuthContext);
 
     const initialValues = {
         task_title: '',
@@ -50,13 +50,14 @@ const TaskCreation = ({open, onClose, onTaskCreated, id }) => {
             }
 
             const data = await response.json();
-            console.log("Task created successfully:", data);
+            showMessage('Task successful created!', 'success');
 
             if (onTaskCreated) onTaskCreated(data);
             resetForm();
             onClose();
+            fetchTasks(id)
         } catch (error) {
-            console.error("Error creating the task:", error.message);
+            showMessage(errorMessage, 'error');
         }
     };
 
