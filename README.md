@@ -1,6 +1,8 @@
 # **Day Task**  
 
- Link do site: https://web-prog-pratical-work-taupe.vercel.app/
+ Link do projeto no GitHub: https://github.com/PedroAlencarr/WebProgPraticalWork
+ Link do site no frontend: https://web-prog-pratical-work-taupe.vercel.app
+ Link da API do backend: https://webprogpraticalwork-backend.onrender.com/
 
 Uma aplicação de Kanban colaborativa, simples e eficiente para gerenciamento de tarefas.  
 
@@ -38,7 +40,7 @@ O **Day Task** permite que os usuários organizem suas tarefas em boards com sta
 - **Hospedagem**: Render.  
 
 ### **Outras Bibliotecas/Recursos**  
-- JWT para autenticação.  
+- Express session para autenticação.  
 - Mongoose para integração com o MongoDB.  
 - Vite.js para o build do frontend.
 - MUI - biblioteca de componentes do frontend.
