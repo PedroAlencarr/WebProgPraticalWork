@@ -1,6 +1,7 @@
 const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 
+
 const getUsers = async (req, res) => { 
     try {
         const users = await User.find({})
@@ -10,6 +11,7 @@ const getUsers = async (req, res) => {
     }
 }
 
+// apagar antes da entrega
 const getUser = async (req, res) => {
     try {
         const id = req.params.id
@@ -68,12 +70,39 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const id = req.params.id
-        const user = await User.findByIdAndUpdate(id, req.body)
+        const id = req.userId
+        const updates = req.body
+        const user = await User.findById(id)
 
         if (!user) {
             res.status(404).json({ message: 'User not found' })
         }
+
+        if (password && password.length < 8) {
+            return res.status(400).json({ message: 'A senha precisa ter pelo menos 8 caracteres!' })
+        }
+    
+        if (first_name && first_name.length < 2) {
+            return res.status(400).json({ message: 'O nome precisa ter pelo menos 2 caracteres!' })
+        }
+    
+        if (last_name && last_name.length < 2) {
+            return res.status(400).json({ message: 'O sobrenome precisa ter pelo menos 2 caracteres!' })
+        }
+
+        if (updates.first_namename) user.first_namename = updates.first_namename;
+        if (updates.last_name) user.last_name = updates.last_name;
+
+        // Atualiza e faz hash da senha, se enviada
+        if (updates.password) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(updates.password, salt);
+        }
+
+        // Salva as alterações
+        await user.save();
+    
+        const updateUser = await User.findByIdAndUpdate(id, req.body)
 
         const updatedUser = await User.findById(id)
         res.status(200).json(updatedUser)

@@ -19,7 +19,7 @@ router.patch("/current", isAuthenticated, updateCurrentUser);
 router.get("/:id", isAuthenticated, getUser);
 router.get("/", isAuthenticated, getUsers);
 router.post("/", createUser);
-router.patch("/:id", updateUser);
+router.patch("/current", isAuthenticated, updateUser);
 router.delete("/:id", deleteUser);
 router.post("/login", loginUser);
 router.post("/logout", isAuthenticated, logoutUser);
