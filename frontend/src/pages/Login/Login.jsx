@@ -14,12 +14,16 @@ import {
     VisibilityOutlined, 
     VisibilityOffOutlined 
 } from '@mui/icons-material';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import "../Login/Login.scss";
 import Logo from '../../assets/images/logo.png';
+import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import CustomField from '../../components/CustomField/CustomField';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext.jsx';
+
+const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
 
 const StyledLink = styled(Link)(() => ({
     color: '#FED36A',
@@ -30,6 +34,9 @@ const StyledLink = styled(Link)(() => ({
 }));
 
 export default function Login() {
+    const navigate = useNavigate();
+    const { fetchUserCurrent } = useContext(AuthContext);
+
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -53,8 +60,37 @@ export default function Login() {
     };
 
     const handleSubmit = async (values, { resetForm }) => {
-        console.log(values)
-        resetForm()
+        const email = values.email;
+        const password = values.password;
+
+        try {
+            const response = await fetch(`${VITE_BACK_URL}/api/users/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                }),
+                credentials: 'include',
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Login realizado com sucesso', data);
+
+                fetchUserCurrent()
+                navigate('/boards');
+            } else {
+                const errorData = await response.json();
+                console.log('Erro no login:', errorData.message);
+            }
+
+            resetForm();
+        } catch (error) {
+            console.error('Erro ao fazer login:', error);
+        }
     };
 
     return (
@@ -68,7 +104,9 @@ export default function Login() {
                 padding: '2rem',
             }}
         >
-            <img className='login__logo' src={Logo} alt='DayTask logo' />
+            <Box sx={{width: '8.7rem', marginBottom: '3rem'}}>
+                <img src={Logo} alt='DayTask logo' />
+            </Box>
             <Typography
                 component="h2"
                 gutterBottom

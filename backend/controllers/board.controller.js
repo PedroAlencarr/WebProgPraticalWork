@@ -11,7 +11,6 @@ const getBoards = async (req, res) => {
   }
 };
 
-//TO DO REGEX
 const getBoardById = async (req, res) => {
   const userId = req.userId
   try {

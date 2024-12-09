@@ -23,25 +23,6 @@ export default function Footer() {
                     md: '5rem',
                 },
         }}>
-            <nav>
-                <List sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' }, gap: 1 }}>
-                    <ListItem style={{ width: 'fit-content' }} disablePadding>
-                        <ListItemText>
-                            <StyledLink to="/">Home</StyledLink>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem style={{ width: 'fit-content' }} disablePadding>
-                        <ListItemText>
-                            <StyledLink to="/pagina2">Pagina 2</StyledLink>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem style={{ width: 'fit-content' }} disablePadding>
-                        <ListItemText>
-                            <StyledLink to="/pagina3">Pagina 3</StyledLink>
-                        </ListItemText>
-                    </ListItem>
-                </List>
-            </nav>
             <Typography
                 variant="body2"
                 sx={{
