@@ -19,8 +19,6 @@ const getBoardById = async (req, res) => {
       return res.status(404).json({ message: "Board não encontrado" });
     }
 
-    console.log(board.sharedWith.includes(userId))
-
     if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
       return res.status(401).json({ message: "Acesso negado" });
     }
@@ -63,18 +61,14 @@ const updateBoard = async (req, res) => {
       return res.status(404).json({ message: "Board não encontrado" });
     }
 
-    const isAuthorized =
-      board.createdBy.toString() === userId || // É o criador?
-      board.sharedWith.some((id) => id.toString() === userId); // Está na lista de compartilhamento?
-
-    if (!isAuthorized) {
+    if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
       return res.status(401).json({ message: "Acesso negado" });
     }
 
-      const id = req.params.id;
-      const update_board = await Board.findByIdAndUpdate(id, req.body, { new: true });
+    const id = req.params.id;
+    const update_board = await Board.findByIdAndUpdate(id, req.body, { new: true });
 
-      res.status(200).json(board);
+    res.status(200).json(board);
 
   } catch (error) {
       res.status(500).json({ error: error.message });
@@ -89,13 +83,10 @@ const deleteBoard = async (req, res) => {
       return res.status(404).json({ message: "Board não encontrado" });
     }
 
-    const isAuthorized =
-      board.createdBy.toString() === userId || // É o criador?
-      board.sharedWith.some((id) => id.toString() === userId); // Está na lista de compartilhamento?
-
-    if (!isAuthorized) {
+    if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
       return res.status(401).json({ message: "Acesso negado" });
     }
+    
     await Card.deleteMany({ board: req.params.id });
     await User.updateMany(
       { board: req.params.id },
