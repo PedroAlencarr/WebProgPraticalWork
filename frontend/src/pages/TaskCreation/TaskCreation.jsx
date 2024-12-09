@@ -1,293 +1,135 @@
-import './TaskCreation.scss';
-import React, { useState, useEffect } from 'react';
-import {
-    Container,
-    Box,
-    Button,
-    Typography,
-    InputAdornment,
-    Chip,
-} from '@mui/material';
+import React, { useContext } from 'react';
+import { Modal, Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
-import Autocomplete from '@mui/material/Autocomplete';
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
+import { AuthContext } from '../../context/AuthContext';
+import CustomField from '../../components/CustomField/CustomField.jsx';
+import CustomButton from '../../components/CustomButton/CustomButton.jsx';
 
-const StyledTextField = styled(TextField)(() => ({
-    '& .MuiOutlinedInput-root': {
-        backgroundColor: '#455A64',
-        color: '#fff',
-        borderRadius: '0px',
-    },
-    '& .MuiOutlinedInput-root.Mui-focused': {
-        backgroundColor: '#455A64',
-        borderColor: '#1976d2',
-    },
-    '& .MuiInputLabel-root': {
-        color: '#FFFFFF',
-        fontSize: '1.125rem',
-        transform: 'translate(0, -.25rem)',
-        position: 'relative',
-        fontWeight: 'bold',
-    },
-    '& .MuiInputLabel-shrink': {
-        transform: 'translate(0, -.25rem) scale(1)',
-        fontWeight: 'bold',
-    },
-    '& .MuiInputBase-input::placeholder': {
-        color: '#FFFFFF',
-        opacity: 0.9,
-    },
+const StyledBox = styled(Box)(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2.5rem',
 }));
 
-export default function TaskCreation() {
-    const [members, setMembers] = useState([]);
-    const [selectedMembers, setSelectedMembers] = useState([]);
+const validationSchema = Yup.object({
+    task_title: Yup.string().required('Task Title is required'),
+    task_details: Yup.string().required('Task Detailment is required'),
+});
 
-    useEffect(() => {
-        const fetchMembers = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/api/members');
-                if (!response.ok) throw new Error('Failed to fetch members');
-                const data = await response.json();
-                setMembers(data);
-            } catch (error) {
-                console.error('Error fetching members:', error);
-            }
-        };
-        fetchMembers();
-    }, []);
-
-    const handleMembersChange = (event, value) => {
-        setSelectedMembers(value);
-    };
-
-    const validationSchema = Yup.object({
-        task_title: Yup.string().required('Task Title is required'),
-        task_details: Yup.string().required('Task Detailment is required'),
-        time: Yup.string()
-            .nullable()
-            .notRequired()
-            .matches(
-                /^([01]\d|2[0-3]):([0-5]\d)$/,
-                'The time must be in HH:mm format'
-            ),
-        date: Yup.string()
-            .matches(
-                /^\d{2}-\d{2}-\d{4}$/,
-                'The date must be in DD-MM-YYYY format'
-            )
-            .test(
-                'is-valid-date',
-                'Invalid date',
-                (value) => {
-                    if (!value) return true;
-                    const [day, month, year] = value.split('-');
-                    const isoDate = `${year}-${month}-${day}`;
-                    const date = new Date(isoDate);
-                    return (
-                        date instanceof Date &&
-                        !isNaN(date.getTime()) &&
-                        date.toISOString().startsWith(isoDate)
-                    );
-                }
-            )
-            .nullable()
-            .notRequired(),
-    });
+const TaskCreation = ({open, onClose, onTaskCreated, id }) => {
+    const { user } = useContext(AuthContext);
 
     const initialValues = {
         task_title: '',
         task_details: '',
-        time: '',
-        date: '',
     };
 
     const handleSubmit = async (values, { resetForm }) => {
         try {
-            const payload = { ...values, members: selectedMembers };
-            const response = await fetch('http://localhost:3000/api/tasks', {
-                method: 'POST',
+            const payload = {
+                title: values.task_title,
+                description: values.task_details,
+                board: {id},
+                status: "To Do",
+                createdBy: user._id,
+            };
+
+            const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/cards/${id}`, {
+                method: "POST",
+                credentials: "include",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
             });
 
-            if (!response.ok) throw new Error('Failed to create task');
-            const data = await response.json();
-            console.log('Task created:', data);
+            if (!response.ok) {
+                throw new Error("Failed to create the task. Check the data sent.");
+            }
 
+            const data = await response.json();
+            console.log("Task created successfully:", data);
+
+            if (onTaskCreated) onTaskCreated(data);
             resetForm();
-            setSelectedMembers([]);
+            onClose();
         } catch (error) {
-            console.error('Error:', error);
+            console.error("Error creating the task:", error.message);
         }
     };
 
     return (
-        <Container
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '2rem',
-                width: '100%',
-            }}
+        <Modal
+            open={open}
+            onClose={onClose}
+            aria-labelledby="task-creation-modal"
+            aria-describedby="form-modal-for-creating-tasks"
         >
-            <Typography
-                component="h2"
-                gutterBottom
+            <Box
                 sx={{
-                    fontSize: '2rem',
-                    fontWeight: '500',
-                    color: '#fff',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: { xs: '90%', sm: '500px', md: '500px' },
+                    bgcolor: '#212832',
+                    borderRadius: 1,
+                    boxShadow: 24,
+                    p: 4,
                 }}
             >
-                Create New Task
-            </Typography>
-            <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-            >
-                {({ errors, touched }) => (
-                    <Form
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                width: '100%',
-                                mt: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 2,
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Field
-                                name="task_title"
-                                as={StyledTextField}
-                                label="Task Title"
-                                type="text"
-                                sx={{ width: { xs: '20rem', sm: '30rem', md: '30rem' } }}
-                                error={touched.task_title && Boolean(errors.task_title)}
-                                helperText={touched.task_title && errors.task_title}
-                            />
-                            <Field
-                                name="task_details"
-                                as={StyledTextField}
-                                label="Task Detailment"
-                                type="text"
-                                multiline
-                                rows={4}
-                                sx={{ width: { xs: '20rem', sm: '30rem', md: '30rem' } }}
-                                error={touched.task_details && Boolean(errors.task_details)}
-                                helperText={touched.task_details && errors.task_details}
-                            />
-                            <Autocomplete
-                                multiple
-                                options={members}
-                                getOptionLabel={(option) => option.name}
-                                value={selectedMembers}
-                                onChange={handleMembersChange}
-                                renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Chip
-                                            key={option.id}
-                                            label={option.name}
-                                            {...getTagProps({ index })}
-                                            sx={{
-                                                backgroundColor: '#FED36A',
-                                                color: '#000',
-                                            }}
-                                        />
-                                    ))
-                                }
-                                renderInput={(params) => (
-                                    <StyledTextField
-                                        {...params}
-                                        label="Add Team Members"
-                                        placeholder="Search members..."
-                                    />
-                                )}
-                                sx={{ width: { xs: '20rem', sm: '30rem', md: '30rem' } }}
-                            />
-                            <Box
-                                className="time__div"
-                                sx={{
-                                    display: 'flex',
-                                    gap: 2,
-                                    width: '100%',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Field
-                                    name="time"
-                                    as={StyledTextField}
-                                    label="Time"
-                                    type="text"
-                                    placeholder="HH:mm"
-                                    sx={{ width: { xs: '10rem', sm: '14.5rem' } }}
-                                    error={touched.time && Boolean(errors.time)}
-                                    helperText={touched.time && errors.time}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <AccessTimeOutlinedIcon
-                                                    sx={{ marginRight: '.5rem', color: '#FED36A' }}
-                                                />
-                                            </InputAdornment>
-                                        ),
-                                    }}
+                <Typography
+                    component="h2"
+                    gutterBottom
+                    sx={{
+                        fontSize: '1.625rem',
+                        fontWeight: '500',
+                        color: '#fff',
+                        alignSelf: 'flex-start',
+                    }}
+                >
+                    Create New Task
+                </Typography>
+
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
+                >
+                    {({ errors, touched, isValid, dirty }) => (
+                        <Form>
+                            <StyledBox>
+                                <CustomField
+                                    name="task_title"
+                                    label="Task Title"
+                                    error={touched.task_title && Boolean(errors.task_title)}
+                                    helperText={touched.task_title && errors.task_title}
+                                    fullWidth
                                 />
-                                <Field
-                                    name="date"
-                                    as={StyledTextField}
-                                    label="Date"
-                                    type="text"
-                                    placeholder="DD-MM-YYYY"
-                                    sx={{ width: { xs: '10rem', sm: '14.5rem' } }}
-                                    error={touched.date && Boolean(errors.date)}
-                                    helperText={touched.date && errors.date}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <EventOutlinedIcon
-                                                    sx={{ marginRight: '.5rem', color: '#FED36A' }}
-                                                />
-                                            </InputAdornment>
-                                        ),
-                                    }}
+                                <CustomField
+                                    name="task_details"
+                                    label="Task Detailment"
+                                    multiline
+                                    rows={4}
+                                    error={touched.task_details && Boolean(errors.task_details)}
+                                    helperText={touched.task_details && errors.task_details}
+                                    fullWidth
                                 />
-                            </Box>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                sx={{
-                                    width: { xs: '70%', sm: '50%', md: '25%' },
-                                    padding: '1rem',
-                                    mt: 3,
-                                    backgroundColor: '#FED36A',
-                                    color: '#000',
-                                    '&:hover': { backgroundColor: '#E5BC5E' },
-                                }}
-                            >
-                                Create Task
-                            </Button>
-                        </Box>
-                    </Form>
-                )}
-            </Formik>
-        </Container>
+                                <CustomButton
+                                    variantStyle="filled"
+                                    text="Create Task"
+                                    type="submit"
+                                    disabled={!(isValid && dirty)}
+                                />
+                            </StyledBox>
+                        </Form>
+                    )}
+                </Formik>
+            </Box>
+        </Modal>
     );
-}
+};
+
+export default TaskCreation;

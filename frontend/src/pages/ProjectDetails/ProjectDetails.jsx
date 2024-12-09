@@ -1,8 +1,8 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import { styled } from "@mui/system";
 import { Box, Typography, Button } from "@mui/material";
+import TaskCreation from "../TaskCreation/TaskCreation";
 
 const Section = styled(Box)({
   display: "flex",
@@ -71,11 +71,20 @@ const AddTaskButton = styled(Button)({
 export default function ProjectDetails() {
   const { id } = useParams();
   const [board, setBoard] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleModalOpen = () => {
+    setOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setOpen(false);
+  };
 
   const fetchBoard = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_BACK_URL}/api/boards/${id}`, {
-          credentials: 'include',
+        credentials: 'include',
       });
       if (!response.ok) {
         throw new Error('Erro ao buscar board');
@@ -91,7 +100,6 @@ export default function ProjectDetails() {
     fetchBoard();
   }, []);
 
-  console.log(board)
   return (
     <Section>
       <TextBox>
@@ -125,9 +133,12 @@ export default function ProjectDetails() {
           <BoardHeader>Done</BoardHeader>
         </Board>
       </ProgressBox>
-      <Box className="button__div" sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-      <AddTaskButton>Add Task</AddTaskButton>
+
+      <Box className="button__div" sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <AddTaskButton onClick={handleModalOpen}>Add Task</AddTaskButton>
       </Box>
+
+      <TaskCreation open={open} onClose={handleModalClose} id={id}/>
     </Section>
   );
 }
