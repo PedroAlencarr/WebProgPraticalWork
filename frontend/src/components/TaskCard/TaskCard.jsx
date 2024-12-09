@@ -1,164 +1,87 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Box, Button, Typography, IconButton, Menu, MenuItem } from '@mui/material';
-import ArrowIcon from '@mui/icons-material/ArrowDropDown';
+import React, { useState } from 'react';
+import { Card, CardContent, Typography, Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
-export default function TaskCard({ cardId, currentStatus }) {
-  const [dropdownVisible, setDropdownVisible] = useState(null);  
-  const [selectedStatus, setSelectedStatus] = useState(currentStatus);
-  const [title, setTitle] = useState('Carregando título...');
-  const [description, setDescription] = useState('Carregando descrição...');
-  const anchorRef = useRef(null); 
-
-  const toggleDropdown = (event) => {
-    setDropdownVisible(event.currentTarget); 
+export default function CardTask({ id, title, description, onDelete, onChangeStatus }) {
+  console.log(id)
+  const [anchorEl, setAnchorEl] = useState(null);
+  
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  useEffect(() => {
-    const fetchCardData = async () => {
-      try {
-        const response = await fetch(`/api/cards/${cardId}`);
-        if (!response.ok) {
-          throw new Error('Falha ao carregar os dados do card');
-        }
-        const data = await response.json();
-        setTitle(data.title || 'Título não disponível');
-        setDescription(data.description || 'Descrição não disponível');
-        setSelectedStatus(data.status || 'To Do');
-      } catch (error) {
-        console.error('Erro ao buscar dados do card:', error);
-        setTitle('Título não disponível');
-        setDescription('Descrição não disponível');
-      }
-    };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
-    if (cardId) {
-      fetchCardData();
-    }
-  }, [cardId]);
+  const handleChangeStatus = (status) => {
+    onChangeStatus(id, status);
+    handleMenuClose();
+  };
 
-  const handleStatusChange = async (newStatus) => {
-    setSelectedStatus(newStatus);
-
-    try {
-      const response = await fetch(`/api/cards/${cardId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Falha ao atualizar o status');
-      }
-
-      console.log('Status atualizado com sucesso!');
-    } catch (error) {
-      console.error('Erro ao atualizar o status:', error);
-      setSelectedStatus(currentStatus);
-    }
+  const handleDelete = () => {
+    onDelete(id);
+    handleMenuClose();
   };
 
   return (
-    <Box
-      sx={{
-        width: 250,
-        backgroundColor: '#212832',
-        color: 'white',
+    <Card sx={{
+      width: '100%',
+      minHeight: '150px',
+      height: '100%',
+      backgroundColor: '#455A64',
+      borderRadius: '0',
+      padding: '1rem',
+      cursor: 'pointer',
+      position: 'relative',
+      '& .MuiCardContent-root': {
+        minHeight: '150px',
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        padding: 2,
-        minHeight: 80,
-        position: 'relative',
-      }}
-    >
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <Typography variant="h6" sx={{ margin: 0 }}>
-            {title}
-          </Typography>
-          <Typography variant="body2" sx={{ marginTop: 1 }}>
-            {description}
-          </Typography>
-        </Box>
-        <IconButton
-          onClick={toggleDropdown}
-          ref={anchorRef} 
-          sx={{ color: 'white' }}
-        >
-          <ArrowIcon />
-        </IconButton>
-      </Box>
+        justifyContent: 'space-between',
+      },
+    }}>
+      <CardContent>
+        <Typography 
+          variant="h3"
+          sx={{
+            fontSize: '21px',
+            color: '#fff',
+            marginBottom: '1rem',
+            lineHeight: '1.2',
+            maxHeight: '2.4em',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical'
+          }}>
+          {title}
+        </Typography>
+        <Typography sx={{ color: '#BCCFD8', marginBottom: '1rem' }}>
+          {description}
+        </Typography>
+      </CardContent>
+
+      <IconButton
+        sx={{ position: 'absolute', top: '10px', right: '10px' }}
+        onClick={handleMenuOpen}
+      >
+        <MoreVertIcon sx={{ color: 'white' }} />
+      </IconButton>
 
       <Menu
-        anchorEl={dropdownVisible} 
-        open={Boolean(dropdownVisible)}  
-        onClose={() => setDropdownVisible(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        PaperProps={{
-          style: {
-            backgroundColor: '#455A64',  
-            borderRadius: '4px',  
-            padding: '5px 0', 
-          },
-        }}
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
       >
-        <MenuItem
-          onClick={() => handleStatusChange('To Do')}
-          sx={{
-            color: 'white',
-            '&:hover': {
-              backgroundColor: '#FED36A',
-              color: '#455A64',
-            },
-          }}
-        >
-          To Do
-        </MenuItem>
-        <MenuItem
-          onClick={() => handleStatusChange('Doing')}
-          sx={{
-            color: 'white',
-            '&:hover': {
-              backgroundColor: '#FED36A',
-              color: '#455A64',
-            },
-          }}
-        >
-          Doing
-        </MenuItem>
-        <MenuItem
-          onClick={() => handleStatusChange('Done')}
-          sx={{
-            color: 'white',
-            '&:hover': {
-              backgroundColor: '#FED36A',
-              color: '#455A64',
-            },
-          }}
-        >
-          Done
-        </MenuItem>
-        <MenuItem
-          onClick={() => handleStatusChange('Rejected')}
-          sx={{
-            color: 'white',
-            '&:hover': {
-              backgroundColor: '#FED36A',
-              color: '#455A64',
-            },
-          }}
-        >
-          Rejected
-        </MenuItem>
+        <MenuItem onClick={() => handleChangeStatus('Rejected')}>Rejected</MenuItem>
+        <MenuItem onClick={() => handleChangeStatus('To Do')}>To Do</MenuItem>
+        <MenuItem onClick={() => handleChangeStatus('Doing')}>Doing</MenuItem>
+        <MenuItem onClick={() => handleChangeStatus('Done')}>Done</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete Task</MenuItem>
       </Menu>
-    </Box>
+    </Card>
   );
 }
