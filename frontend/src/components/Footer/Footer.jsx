@@ -1,15 +1,6 @@
-import './Footer.scss';
-import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-
-const StyledLink = styled(Link)(() => ({
-    color: '#fff',
-    textDecoration: 'none',
-    '&:hover': {
-        color: '#2b3645',
-    },
-}));
 
 export default function Footer() {
     return (
@@ -27,7 +18,7 @@ export default function Footer() {
                 variant="body2"
                 sx={{
                     marginTop: '2rem',
-                    textAlign: { xs: 'center', md: 'left' },
+                    textAlign: 'center',
                 }}
             >
                 © 2024, UFSC. All rights reserved.
