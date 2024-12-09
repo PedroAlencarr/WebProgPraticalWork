@@ -49,10 +49,15 @@ const getCards = async (req, res) => {
 
 const getCardsByBoard = async (req, res) => {
   try {
+    const userId = req.userId;
     const { boardId } = req.params;
-    const board = await Board.findById(boardId);
+    const board = await Board.findById(boardId)
     if (!board) {
       return res.status(404).json({ message: "Board não encontrado" });
+    }
+
+    if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
+      return res.status(403).json({ message: "Você não tem permissão para visualizar os cards deste board!" });
     }
 
     const cards = await Card.find({ board: boardId });
@@ -64,7 +69,19 @@ const getCardsByBoard = async (req, res) => {
 
 const updateCard = async (req, res) => {
   try {
+    const userId = req.userId;
     const { id } = req.params;
+
+    const card = await Card.findById(id);
+    if (!card) {
+      return res.status(404).json({ message: "Card não encontrado" });
+    }
+
+    const board = await Board.findById(card.board);
+
+    if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
+      return res.status(403).json({ message: "Você não tem permissão para editar este card!" });
+    }
 
     const updated = await Card.findByIdAndUpdate(id, req.body, { new: true });
 
@@ -80,18 +97,19 @@ const updateCard = async (req, res) => {
 
 const deleteCard = async (req, res) => {
   try {
+    const userId = req.userId;
     const { id } = req.params;
     const cardExists = await Card.findById(id);
     if (!cardExists) {
       return res.status(404).json({ message: "Card não encontrado" });
     }
 
-    const boardsUpdated = await Board.updateMany(
-      { cards: id },
-      { $pull: { cards: id } } // Remove o ID do Card do array
-    );
+    const board = await Board.findById(cardExists.board);
 
-    console.log(`Boards atualizados: ${boardsUpdated.modifiedCount}`);
+    if (board.createdBy.toString() !== userId && !board.sharedWith.includes(userId)) {
+      return res.status(403).json({ message: "Você não tem permissão para deletar este card!" });
+    }
+
     await Card.findByIdAndDelete(id);
 
     res.status(200).json({
