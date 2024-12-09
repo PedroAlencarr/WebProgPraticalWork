@@ -20,6 +20,14 @@ const BoardSchema = new Schema(
       required: true,
     },
 
+    card: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Card",
+        required: false,
+      },
+
+    ],
     sharedWith: [
       {
         type: Schema.Types.ObjectId,
