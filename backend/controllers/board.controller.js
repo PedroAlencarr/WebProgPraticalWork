@@ -12,12 +12,22 @@ const getBoards = async (req, res) => {
 };
 
 const getBoardById = async (req, res) => {
+  const userId = req.userId
   try {
     const board = await Board.findById(req.params.id);
     if (!board) {
       return res.status(404).json({ message: "Board não encontrado" });
     }
-    res.status(200).json(board);
+
+    const isAuthorized =
+      board.createdBy.toString() === userId || // É o criador?
+      board.sharedWith.some((id) => id.toString() === userId); // Está na lista de compartilhamento?
+
+    if (!isAuthorized) {
+      return res.status(401).json({ message: "Acesso negado" });
+    }
+
+    res.status(200).res.send(board);
   } catch (err) {
     res.status(500).json({ message: "Erro ao buscar board", error: err });
   }
@@ -48,13 +58,24 @@ const createBoard = async (req, res) => {
 };
 
 const updateBoard = async (req, res) => {
+  const userId = req.userId
   try {
+    const board = await Board.findById(req.params.id);
+    if (!board) {
+      return res.status(404).json({ message: "Board não encontrado" });
+    }
+
+    const isAuthorized =
+      board.createdBy.toString() === userId || // É o criador?
+      board.sharedWith.some((id) => id.toString() === userId); // Está na lista de compartilhamento?
+
+    if (!isAuthorized) {
+      return res.status(401).json({ message: "Acesso negado" });
+    }
+
       const id = req.params.id;
-      const board = await Board.findByIdAndUpdate(id, req.body, { new: true });
-      if (!board) {
-          res.status(404).json({ message: 'Board não encontrado' });
-          return;
-      }
+      const update_board = await Board.findByIdAndUpdate(id, req.body, { new: true });
+
       res.status(200).json(board);
 
   } catch (error) {
@@ -63,16 +84,27 @@ const updateBoard = async (req, res) => {
 };
 
 const deleteBoard = async (req, res) => {
+  const userId = req.userId
   try {
+    const board = await Board.findById(req.params.id);
+    if (!board) {
+      return res.status(404).json({ message: "Board não encontrado" });
+    }
+
+    const isAuthorized =
+      board.createdBy.toString() === userId || // É o criador?
+      board.sharedWith.some((id) => id.toString() === userId); // Está na lista de compartilhamento?
+
+    if (!isAuthorized) {
+      return res.status(401).json({ message: "Acesso negado" });
+    }
     await Card.deleteMany({ board: req.params.id });
     await User.updateMany(
       { board: req.params.id },
       { $pull: { board: req.params.id } }
     );
-    const board = await Board.findByIdAndDelete(req.params.id);
-    if (!board) {
-      return res.status(404).json({ message: "Board não encontrado" });
-    }
+    const deleted_board = await Board.findByIdAndDelete(req.params.id);
+
     res.status(200).json({ message: "Board excluído com sucesso" });
   } catch (err) {
     res.status(500).json({ message: "Erro ao excluir board", error: err });
