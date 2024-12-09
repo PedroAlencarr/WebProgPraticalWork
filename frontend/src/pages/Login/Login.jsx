@@ -23,8 +23,6 @@ import CustomField from '../../components/CustomField/CustomField';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext.jsx';
 
-const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
-
 const StyledLink = styled(Link)(() => ({
     color: '#FED36A',
     textDecoration: 'none',
